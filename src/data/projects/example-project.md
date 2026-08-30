@@ -1,18 +1,26 @@
 ---
 title: "Example Roblox Project"
 slug: "example-roblox-project"
-description: "A sample portfolio entry used to verify the projects content collection."
-category: "Roblox Development"
-tags:
-  - "Luau"
-  - "Systems"
-featured: true
-openSource: false
-year: 2026
+description: "A modular combat prototype demonstrating clean, scalable Roblox systems."
 thumbnail: "/images/arako.jpg"
-links:
-  - label: "Live Demo"
-    url: "https://example.com"
+tabs:
+  - "combat"
+  - "open-source"
+  - "prototypes"
+year: 2026
+featured: true
+video: "https://www.youtube.com/watch?v=M7lc1UVf-VE"
+gameUrl: "https://www.roblox.com/games/"
+sourceUrl: "https://github.com/"
+externalUrl: "https://example.com/"
 ---
 
-This placeholder entry can be replaced when the first portfolio project is ready.
+## Overview
+
+This example project verifies the portfolio's project data, detail routing, media, and Markdown rendering. It can be replaced when the first production project is ready.
+
+## Highlights
+
+- Modular server and client architecture
+- Clear separation between combat state and presentation
+- Structured for future skills and gameplay extensions

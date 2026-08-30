@@ -1,6 +1,18 @@
 ---
+import { getCollection } from 'astro:content';
+
 import Header from '../components/Header.astro';
+import ProjectCard from '../components/ProjectCard.astro';
 import '../styles/global.css';
+
+const [exampleProject] = await getCollection(
+	'projects',
+	({ data }) => data.slug === 'example-roblox-project',
+);
+
+if (!exampleProject) {
+	throw new Error('The example project entry could not be loaded.');
+}
 ---
 
 <html lang="en">
@@ -62,6 +74,12 @@ import '../styles/global.css';
 							</a>
 						</div>
 					</div>
+				</div>
+			</section>
+
+			<section id="work" class="mx-auto max-w-content px-page pb-section" aria-label="Featured project">
+				<div class="max-w-2xl">
+					<ProjectCard project={exampleProject} />
 				</div>
 			</section>
 		</main>

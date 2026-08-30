@@ -2,10 +2,17 @@ import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 
-const projectLink = z.object({
-	label: z.string(),
-	url: z.string().url(),
-});
+import { workTabIds } from './config/workTabs';
+
+const youtubeUrl = z.url().refine((value) => {
+	const hostname = new URL(value).hostname;
+
+	return (
+		hostname === 'youtu.be' ||
+		hostname.endsWith('youtube.com') ||
+		hostname.endsWith('youtube-nocookie.com')
+	);
+}, 'Video must be a YouTube URL.');
 
 const projects = defineCollection({
 	loader: glob({
@@ -13,17 +20,17 @@ const projects = defineCollection({
 		pattern: '**/*.{md,mdx}',
 	}),
 	schema: z.object({
-		title: z.string(),
-		slug: z.string(),
-		description: z.string(),
-		category: z.string(),
-		tags: z.array(z.string()).default([]),
-		featured: z.boolean().default(false),
-		openSource: z.boolean().default(false),
+		title: z.string().min(1),
+		slug: z.string().min(1),
+		description: z.string().min(1),
+		thumbnail: z.string().min(1),
+		tabs: z.array(z.enum(workTabIds)).min(1),
 		year: z.number().int(),
-		thumbnail: z.string().optional(),
-		video: z.string().optional(),
-		links: z.array(projectLink).default([]),
+		featured: z.boolean().default(false),
+		video: youtubeUrl.optional(),
+		gameUrl: z.url().optional(),
+		sourceUrl: z.url().optional(),
+		externalUrl: z.url().optional(),
 	}),
 });
 
