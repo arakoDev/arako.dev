@@ -2,7 +2,7 @@ import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 
-import { workTabIds } from './config/workTabs';
+import { projectTabIds } from './config/workTabs';
 
 const youtubeUrl = z.url().refine((value) => {
 	const hostname = new URL(value).hostname;
@@ -24,7 +24,7 @@ const projects = defineCollection({
 		slug: z.string().min(1),
 		description: z.string().min(1),
 		thumbnail: z.string().min(1),
-		tabs: z.array(z.enum(workTabIds)).min(1),
+		tabs: z.array(z.enum(projectTabIds)).min(1),
 		year: z.number().int(),
 		featured: z.boolean().default(false),
 		video: youtubeUrl.optional(),
