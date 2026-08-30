@@ -1,6 +1,6 @@
 ---
+import Header from '../components/Header.astro';
 import '../styles/global.css';
-
 ---
 
 <html lang="en">
@@ -14,24 +14,55 @@ import '../styles/global.css';
 		<title>Arako</title>
 	</head>
 	<body>
-		<header>
-			<a href="/">Arako</a>
-			<nav aria-label="Main navigation">
-				<a href="#work">Work</a>
-				<a href="#about">About</a>
-				<a href="#contact">Contact</a>
-			</nav>
-		</header>
+		<Header />
 
 		<main>
-			<section>
-				<p>Roblox Scripter</p>
-				<h1>Arako</h1>
-				<p>
-					Roblox Scripter with over 5 years of coding experience and 2 years of experience
-					developing on Roblox. I focus on writing clean, organized, and optimized code,
-					ensuring scalability, maintainability, and consistent performance across projects.
-				</p>
+			<section
+				class="mx-auto flex min-h-[calc(100svh-4rem)] max-w-content items-center px-page py-section"
+				aria-labelledby="hero-title"
+			>
+				<div class="flex w-full flex-col items-start gap-8 md:flex-row md:items-center md:gap-12 lg:gap-16">
+					<img
+						class="h-44 w-44 shrink-0 self-center rounded-full border border-accent/30 object-cover shadow-xl shadow-black/40 sm:h-52 sm:w-52 md:self-auto lg:h-56 lg:w-56"
+						src="/images/arako.jpg"
+						alt="Arako"
+						width="224"
+						height="224"
+						fetchpriority="high"
+					/>
+
+					<div class="max-w-3xl">
+						<p class="mb-4 text-sm font-semibold uppercase tracking-[0.18em] text-accent">
+							Roblox Scripter
+						</p>
+						<h1
+							id="hero-title"
+							class="m-0 text-5xl font-semibold tracking-[-0.04em] text-text-primary sm:text-7xl lg:text-8xl"
+						>
+							Arako
+						</h1>
+						<p class="mt-6 max-w-2xl text-base leading-7 text-text-muted sm:text-lg sm:leading-8">
+							Roblox Scripter with over 5 years of coding experience and 2 years of experience
+							developing on Roblox. I focus on writing clean, organized, and optimized code,
+							ensuring scalability, maintainability, and consistent performance across projects.
+						</p>
+
+						<div class="mt-8 flex flex-col gap-3 sm:flex-row">
+							<a
+								class="inline-flex items-center justify-center rounded-md bg-accent px-5 py-3 text-sm font-semibold text-background no-underline hover:bg-accent/90"
+								href="#work"
+							>
+								View Work
+							</a>
+							<a
+								class="inline-flex items-center justify-center rounded-md border border-border bg-surface px-5 py-3 text-sm font-semibold text-text-primary no-underline hover:border-accent/50 hover:text-accent"
+								href="#contact"
+							>
+								Contact
+							</a>
+						</div>
+					</div>
+				</div>
 			</section>
 		</main>
 
