@@ -1,30 +1,54 @@
 ---
 import { site } from '../config/site';
+
+function normalizePath(pathname: string) {
+	return pathname.replace(/\/+$/, '') || '/';
+}
+
+const currentPath = normalizePath(Astro.url.pathname);
+
+function isCurrentPage(href: string) {
+	const hrefPath = normalizePath(new URL(href, Astro.url).pathname);
+
+	return hrefPath === '/'
+		? currentPath === hrefPath
+		: currentPath === hrefPath || currentPath.startsWith(`${hrefPath}/`);
+}
 ---
 
 <header class="border-b border-border bg-background">
-	<div class="mx-auto flex max-w-content items-center justify-between gap-6 px-page py-4">
+	<div class="mx-auto flex max-w-content items-center justify-between gap-3 px-page py-2.5">
 		<a
-			class="shrink-0 text-base font-semibold tracking-tight text-text-primary no-underline hover:text-accent"
+			class="inline-flex min-h-11 min-w-11 shrink-0 items-center rounded-md px-2 text-base font-semibold tracking-tight text-text-primary no-underline hover:text-accent"
 			href="/"
 			aria-label={`${site.name} home`}
 		>
 			{site.name}
 		</a>
 
-		<nav aria-label="Primary navigation">
-			<ul class="m-0 flex list-none items-center gap-3 p-0 sm:gap-7">
+		<nav class="min-w-0" aria-label="Primary navigation">
+			<ul class="m-0 flex list-none items-center gap-1 p-0 sm:gap-2">
 				{
-					site.navigation.map((item) => (
-						<li>
-							<a
-								class="text-sm font-medium text-text-muted no-underline hover:text-text-primary"
-								href={item.href}
-							>
-								{item.label}
-							</a>
-						</li>
-					))
+					site.navigation.map((item) => {
+						const isCurrent = isCurrentPage(item.href);
+
+						return (
+							<li>
+								<a
+									class:list={[
+										'inline-flex min-h-11 items-center justify-center rounded-md border px-3 text-sm font-medium no-underline',
+										isCurrent
+											? 'border-border bg-surface text-text-primary'
+											: 'border-transparent text-text-muted hover:border-border hover:bg-surface hover:text-text-primary',
+									]}
+									href={item.href}
+									aria-current={isCurrent ? 'page' : undefined}
+								>
+									{item.label}
+								</a>
+							</li>
+						);
+					})
 				}
 			</ul>
 		</nav>

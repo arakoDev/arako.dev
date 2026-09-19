@@ -37,9 +37,8 @@ export const site = {
 	defaultDescription: "Arako's portfolio showcasing Roblox scripting and development experience.",
 	themeColor: '#080b11',
 	navigation: [
+		{ label: 'Home', href: '/' },
 		{ label: 'Work', href: '/work' },
-		{ label: 'About', href: '/#about' },
-		{ label: 'Contact', href: '/#contact' },
 	],
 	contact: {
 		email: null,
