@@ -1,18 +1,21 @@
 ---
 title: "Example Roblox Project"
-slug: "example-roblox-project"
-description: "A modular combat prototype demonstrating clean, scalable Roblox systems."
-thumbnail: "/images/arako.jpg"
-tabs:
+summary: "A draft content entry used to verify the portfolio's project schema and routes."
+category: "prototypes"
+tags:
   - "combat"
-  - "open-source"
-  - "prototypes"
+  - "client-server"
+  - "modular architecture"
+role: "Placeholder content"
+services: []
+status: "prototype"
+duration: "Not applicable"
+team: "Not applicable"
 year: 2026
-featured: true
-video: "https://www.youtube.com/watch?v=M7lc1UVf-VE"
-gameUrl: "https://www.roblox.com/games/"
-sourceUrl: "https://github.com/"
-externalUrl: "https://example.com/"
+heroImage: "./example-project.jpg"
+heroAlt: "A dark armored figure in a wide-brimmed hat holding a gold-tipped arrow."
+featuredOrder: 1
+draft: true
 ---
 
 ## Overview

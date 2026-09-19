@@ -3,15 +3,17 @@ import { getCollection } from 'astro:content';
 
 import PageHeader from '../../components/PageHeader.astro';
 import ProjectCard from '../../components/ProjectCard.astro';
-import { workTabs } from '../../config/workTabs';
+import { projectCategories } from '../../config/projects';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
-const projects = (await getCollection('projects')).sort(
+const projects = (await getCollection('projects', ({ data }) => !data.draft)).sort(
 	(a, b) =>
-		Number(b.data.featured) - Number(a.data.featured) ||
+		(a.data.featuredOrder ?? Number.POSITIVE_INFINITY) -
+			(b.data.featuredOrder ?? Number.POSITIVE_INFINITY) ||
 		b.data.year - a.data.year ||
 		a.data.title.localeCompare(b.data.title),
 );
+const workTabs = [{ id: 'all', label: 'All' }, ...projectCategories];
 ---
 
 <BaseLayout
@@ -44,7 +46,7 @@ const projects = (await getCollection('projects')).sort(
 	<div id="project-grid" class="mt-10 grid gap-6 md:grid-cols-2">
 		{
 			projects.map((project) => (
-				<div data-project-card data-project-tabs={project.data.tabs.join(' ')}>
+				<div data-project-card data-project-category={project.data.category}>
 					<ProjectCard project={project} />
 				</div>
 			))
@@ -72,8 +74,7 @@ const projects = (await getCollection('projects')).sort(
 			let visibleProjects = 0;
 
 			projectCards.forEach((card) => {
-				const projectTabs = card.dataset.projectTabs?.split(' ') ?? [];
-				const isVisible = tabId === 'all' || projectTabs.includes(tabId);
+				const isVisible = tabId === 'all' || card.dataset.projectCategory === tabId;
 
 				card.hidden = !isVisible;
 				if (isVisible) visibleProjects += 1;
