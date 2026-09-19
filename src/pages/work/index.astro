@@ -14,13 +14,12 @@ const projects = (await getCollection('projects', ({ data }) => !data.draft)).so
 	(a, b) =>
 		(a.data.featuredOrder ?? Number.POSITIVE_INFINITY) -
 			(b.data.featuredOrder ?? Number.POSITIVE_INFINITY) ||
-		b.data.year - a.data.year ||
 		a.data.title.localeCompare(b.data.title),
 );
 const populatedCategories = projectCategories
 	.map((category) => ({
 		...category,
-		count: projects.filter((project) => project.data.category === category.id).length,
+		count: projects.filter((project) => project.data.categories.includes(category.id)).length,
 	}))
 	.filter(({ count }) => count > 0);
 const showFilters =
@@ -87,7 +86,7 @@ const projectCountLabel = `${projects.length} ${projects.length === 1 ? 'project
 			>
 				<p class="text-label font-semibold uppercase tracking-label text-accent">Archive status</p>
 				<h2 id="empty-archive-title" class="mt-3 text-section-title text-text-primary">
-					No public case studies yet
+					No public projects yet
 				</h2>
 				<p class="mt-4 max-w-narrow leading-7 text-text-muted">
 					Project write-ups are being prepared and will appear here once they are ready to share.
@@ -157,7 +156,7 @@ const projectCountLabel = `${projects.length} ${projects.length === 1 ? 'project
 								{section.projects.map((project, projectIndex) => (
 									<li
 										data-project-card
-										data-project-category={project.data.category}
+										data-project-categories={project.data.categories.join(' ')}
 									>
 										<ProjectCard
 											{project}
@@ -212,8 +211,9 @@ const projectCountLabel = `${projects.length} ${projects.length === 1 ? 'project
 						let visibleProjects = 0;
 
 						projectCards.forEach((card) => {
+							const categories = card.dataset.projectCategories?.split(' ') ?? [];
 							const isVisible =
-								category === 'all' || card.dataset.projectCategory === category;
+								category === 'all' || categories.includes(category);
 
 							card.hidden = !isVisible;
 							if (isVisible) visibleProjects += 1;

@@ -6,17 +6,13 @@ interface NavigationTarget {
 
 interface Props {
 	nextProject?: NavigationTarget;
-	relatedService?: NavigationTarget;
 	contact?: NavigationTarget;
 	class?: string;
 }
 
-const { nextProject, relatedService, contact, class: className } = Astro.props;
+const { nextProject, contact, class: className } = Astro.props;
 const links = [
 	{ eyebrow: 'Work archive', title: 'Browse all projects', href: '/work' },
-	...(relatedService
-		? [{ eyebrow: 'Related service', title: relatedService.title, href: relatedService.href }]
-		: []),
 	...(nextProject
 		? [{ eyebrow: 'Next project', title: nextProject.title, href: nextProject.href }]
 		: []),

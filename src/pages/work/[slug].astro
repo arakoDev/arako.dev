@@ -5,14 +5,9 @@ import ButtonLink from '../../components/ButtonLink.astro';
 import MediaFrame from '../../components/MediaFrame.astro';
 import PageHeader from '../../components/PageHeader.astro';
 import ProjectCredits from '../../components/ProjectCredits.astro';
-import ProjectMeta from '../../components/ProjectMeta.astro';
 import ProjectNavigation from '../../components/ProjectNavigation.astro';
 import SectionHeader from '../../components/SectionHeader.astro';
-import {
-	projectCategoryLabels,
-	projectLinkLabels,
-	projectStatusLabels,
-} from '../../config/projects';
+import { projectCategoryLabels, projectLinkLabels } from '../../config/projects';
 import { site } from '../../config/site';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
@@ -29,7 +24,6 @@ export async function getStaticPaths() {
 		(a, b) =>
 			(a.data.featuredOrder ?? Number.POSITIVE_INFINITY) -
 				(b.data.featuredOrder ?? Number.POSITIVE_INFINITY) ||
-			b.data.year - a.data.year ||
 			a.data.title.localeCompare(b.data.title),
 	);
 
@@ -51,36 +45,27 @@ export async function getStaticPaths() {
 
 const { project, nextProject } = Astro.props;
 const { Content } = await render(project);
+const hasBodyContent = Boolean(project.body?.trim());
 const {
-	category,
-	client,
+	categories,
 	confidentiality,
 	credits,
-	duration,
 	heroAlt,
 	heroCaption,
 	heroImage,
 	heroVideo,
 	links,
 	outcome,
-	role,
-	services,
-	status,
 	summary,
-	tags,
-	team,
 	title,
-	year,
 } = project.data;
 const projectLinks = links.map((link) => ({
 	...link,
 	label: link.label ?? projectLinkLabels[link.type],
 }));
+const categoryLabel = categories.map((category) => projectCategoryLabels[category]).join(' · ');
 const contactNavigation = site.contact.inquiryUrl
 	? { href: site.contact.inquiryUrl, title: 'Contact Arako' }
-	: undefined;
-const relatedServiceNavigation = site.navigation.some(({ href }) => href === '/services')
-	? { href: '/services', title: services[0] ?? 'Services' }
 	: undefined;
 ---
 
@@ -95,23 +80,11 @@ const relatedServiceNavigation = site.navigation.some(({ href }) => href === '/s
 
 			<PageHeader
 				class="mt-8"
-				eyebrow={`${projectCategoryLabels[category]} · ${year}`}
+				eyebrow={categoryLabel}
 				{title}
 				description={summary}
 			/>
 		</div>
-
-		<ProjectMeta
-			class="mt-10"
-			{year}
-			{role}
-			{duration}
-			status={projectStatusLabels[status]}
-			{team}
-			{client}
-			{services}
-			{tags}
-		/>
 
 		<MediaFrame
 			class="mt-10"
@@ -122,9 +95,15 @@ const relatedServiceNavigation = site.navigation.some(({ href }) => href === '/s
 			videoUrl={heroVideo}
 		/>
 
-		<div class="prose-portfolio mt-12 max-w-reading border-t border-border-subtle pt-10">
-			<Content />
-		</div>
+		{
+			hasBodyContent && (
+				<div class="mt-12 border-t border-border-subtle pt-10">
+					<div class="prose-portfolio max-w-reading">
+						<Content />
+					</div>
+				</div>
+			)
+		}
 
 		{
 			outcome && (
@@ -154,23 +133,25 @@ const relatedServiceNavigation = site.navigation.some(({ href }) => href === '/s
 		{
 			projectLinks.length > 0 && (
 				<section
-					class="mt-12 max-w-reading border-t border-border-subtle pt-10"
+					class="mt-12 border-t border-border-subtle pt-10"
 					aria-labelledby="project-links-title"
 				>
-					<SectionHeader title="Project links" titleId="project-links-title" />
-					<div class="mt-5 flex flex-wrap gap-3">
-						{projectLinks.map((link) => (
-							<ButtonLink
-								class="gap-2"
-								href={link.url}
-								target="_blank"
-								variant="secondary"
-								aria-label={`${link.label} for ${title} (opens in a new tab)`}
-							>
-								{link.label}
-								<span aria-hidden="true">↗</span>
-							</ButtonLink>
-						))}
+					<div class="max-w-reading">
+						<SectionHeader title="Project links" titleId="project-links-title" />
+						<div class="mt-5 flex flex-wrap gap-3">
+							{projectLinks.map((link) => (
+								<ButtonLink
+									class="gap-2"
+									href={link.url}
+									target="_blank"
+									variant="secondary"
+									aria-label={`${link.label} for ${title} (opens in a new tab)`}
+								>
+									{link.label}
+									<span aria-hidden="true">↗</span>
+								</ButtonLink>
+							))}
+						</div>
 					</div>
 				</section>
 			)
@@ -178,7 +159,6 @@ const relatedServiceNavigation = site.navigation.some(({ href }) => href === '/s
 
 		<ProjectNavigation
 			class="mt-section-tight"
-			relatedService={relatedServiceNavigation}
 			nextProject={nextProject
 				? { href: `/work/${nextProject.id}`, title: nextProject.title }
 				: undefined}

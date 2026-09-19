@@ -1,6 +1,8 @@
 export const projectCategories = [
-	{ id: 'gameplay-systems', label: 'Gameplay systems' },
-	{ id: 'tools-open-source', label: 'Tools and open source' },
+	{ id: 'gameplay', label: 'Gameplay' },
+	{ id: 'combat', label: 'Combat' },
+	{ id: 'combat-skills', label: 'Combat Skills' },
+	{ id: 'open-source', label: 'Open source' },
 	{ id: 'prototypes', label: 'Prototypes' },
 ] as const;
 
@@ -11,30 +13,12 @@ export const projectCategoryIds = projectCategories.map(({ id }) => id) as [
 	...ProjectCategory[],
 ];
 
-export const projectStatuses = [
-	{ id: 'shipped', label: 'Shipped' },
-	{ id: 'ongoing', label: 'Ongoing' },
-	{ id: 'prototype', label: 'Prototype' },
-	{ id: 'archived', label: 'Archived' },
-] as const;
-
-export type ProjectStatus = (typeof projectStatuses)[number]['id'];
-
-export const projectStatusIds = projectStatuses.map(({ id }) => id) as [
-	ProjectStatus,
-	...ProjectStatus[],
-];
-
-export const projectStatusLabels = Object.fromEntries(
-	projectStatuses.map(({ id, label }) => [id, label]),
-) as Record<ProjectStatus, string>;
-
 export const projectCategoryLabels = Object.fromEntries(
 	projectCategories.map(({ id, label }) => [id, label]),
 ) as Record<ProjectCategory, string>;
 
 export const projectLinkTypes = [
-	{ id: 'game', label: 'Play game' },
+	{ id: 'roblox-page', label: 'Roblox page' },
 	{ id: 'source', label: 'View source' },
 	{ id: 'demo', label: 'View demo' },
 	{ id: 'documentation', label: 'Read documentation' },
