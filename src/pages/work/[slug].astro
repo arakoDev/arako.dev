@@ -1,8 +1,7 @@
 ---
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 
-import Header from '../../components/Header.astro';
-import '../../styles/global.css';
+import BaseLayout from '../../layouts/BaseLayout.astro';
 
 interface Props {
 	project: CollectionEntry<'projects'>;
@@ -60,17 +59,11 @@ const projectLinks = [
 ].filter((link): link is ProjectLink => link !== null);
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="description" content={description} />
-		<title>{title} | Arako</title>
-	</head>
-	<body class="flex min-h-screen flex-col">
-		<Header />
-
-		<main class="mx-auto w-full max-w-content flex-1 px-page py-section">
+<BaseLayout
+	{title}
+	{description}
+	mainClass="mx-auto w-full max-w-content px-page py-section"
+>
 			<article class="max-w-4xl">
 				<a class="text-sm font-medium text-text-muted no-underline hover:text-accent" href="/#work">
 					&larr; Back to work
@@ -136,12 +129,4 @@ const projectLinks = [
 					)
 				}
 			</article>
-		</main>
-
-		<footer class="border-t border-border">
-			<div class="mx-auto max-w-content px-page py-6">
-				<p class="m-0 text-sm text-text-muted">&copy; 2026 Arako</p>
-			</div>
-		</footer>
-	</body>
-</html>
+</BaseLayout>

@@ -1,0 +1,46 @@
+---
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { site } from '../config/site';
+import '../styles/global.css';
+
+interface Props {
+	title?: string;
+	description?: string;
+	mainClass?: string;
+}
+
+const {
+	title = site.name,
+	description = site.defaultDescription,
+	mainClass,
+} = Astro.props;
+const documentTitle = title === site.name ? title : `${title} | ${site.name}`;
+---
+
+<!doctype html>
+<html lang={site.language}>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="description" content={description} />
+		<meta name="theme-color" content={site.themeColor} />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="alternate icon" href="/favicon.ico" />
+		<title>{documentTitle}</title>
+	</head>
+	<body class="flex min-h-screen flex-col">
+		<a
+			class="fixed left-4 top-4 z-50 -translate-y-24 rounded-md bg-accent px-4 py-3 text-sm font-semibold text-background no-underline focus:translate-y-0"
+			href="#main-content"
+		>
+			Skip to content
+		</a>
+
+		<Header />
+		<main id="main-content" class:list={['flex-1', mainClass]} tabindex="-1">
+			<slot />
+		</main>
+		<Footer />
+	</body>
+</html>
