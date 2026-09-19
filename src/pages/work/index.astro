@@ -1,11 +1,15 @@
 ---
 import { getCollection } from 'astro:content';
 
+import ButtonLink from '../../components/ButtonLink.astro';
 import PageHeader from '../../components/PageHeader.astro';
 import ProjectCard from '../../components/ProjectCard.astro';
+import SectionHeader from '../../components/SectionHeader.astro';
 import { projectCategories } from '../../config/projects';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
+const filterProjectMinimum = 5;
+const sectionProjectMinimum = 4;
 const projects = (await getCollection('projects', ({ data }) => !data.draft)).sort(
 	(a, b) =>
 		(a.data.featuredOrder ?? Number.POSITIVE_INFINITY) -
@@ -13,7 +17,55 @@ const projects = (await getCollection('projects', ({ data }) => !data.draft)).so
 		b.data.year - a.data.year ||
 		a.data.title.localeCompare(b.data.title),
 );
-const workTabs = [{ id: 'all', label: 'All' }, ...projectCategories];
+const populatedCategories = projectCategories
+	.map((category) => ({
+		...category,
+		count: projects.filter((project) => project.data.category === category.id).length,
+	}))
+	.filter(({ count }) => count > 0);
+const showFilters =
+	projects.length >= filterProjectMinimum && populatedCategories.length > 1;
+const filters = [
+	{ id: 'all', label: 'All projects', count: projects.length },
+	...populatedCategories,
+];
+const featuredProjects = projects.filter(
+	(project) => project.data.featuredOrder !== undefined,
+);
+const remainingProjects = projects.filter(
+	(project) => project.data.featuredOrder === undefined,
+);
+const separateFeaturedProjects =
+	projects.length >= sectionProjectMinimum &&
+	featuredProjects.length >= 2 &&
+	remainingProjects.length >= 2;
+const projectSections = separateFeaturedProjects
+	? [
+			{
+				id: 'featured-work',
+				eyebrow: 'Selected',
+				title: 'Featured work',
+				description: 'A closer look at selected systems and technical projects.',
+				projects: featuredProjects,
+			},
+			{
+				id: 'project-archive',
+				eyebrow: 'Archive',
+				title: 'More projects',
+				description: 'Additional shipped work, prototypes, and open-source projects.',
+				projects: remainingProjects,
+			},
+		]
+	: [
+			{
+				id: 'project-archive',
+				eyebrow: 'Portfolio',
+				title: 'Projects',
+				description: undefined,
+				projects,
+			},
+		];
+const projectCountLabel = `${projects.length} ${projects.length === 1 ? 'project' : 'projects'}`;
 ---
 
 <BaseLayout
@@ -27,71 +79,199 @@ const workTabs = [{ id: 'all', label: 'All' }, ...projectCategories];
 		description="A selection of Roblox systems, gameplay features, open-source work, and experiments."
 	/>
 
-	<div class="mt-10 flex flex-wrap gap-2" aria-label="Filter projects by category">
-		{
-			workTabs.map((tab, index) => (
-				<button
-					class="min-h-11 rounded-md border border-border bg-surface px-4 py-2 text-sm font-medium text-text-muted transition-colors hover:border-accent hover:text-text-primary aria-pressed:border-accent aria-pressed:bg-accent aria-pressed:text-background"
-					type="button"
-					aria-pressed={index === 0 ? 'true' : 'false'}
-					aria-controls="project-grid"
-					data-work-tab={tab.id}
-				>
-					{tab.label}
-				</button>
-			))
-		}
-	</div>
+	{
+		projects.length === 0 ? (
+			<section
+				class="mt-10 max-w-reading rounded-md border border-border-subtle bg-surface px-5 py-8 sm:px-8"
+				aria-labelledby="empty-archive-title"
+			>
+				<p class="text-label font-semibold uppercase tracking-label text-accent">Archive status</p>
+				<h2 id="empty-archive-title" class="mt-3 text-section-title text-text-primary">
+					No public case studies yet
+				</h2>
+				<p class="mt-4 max-w-narrow leading-7 text-text-muted">
+					Project write-ups are being prepared and will appear here once they are ready to share.
+				</p>
+				<ButtonLink class="mt-6" href="/" variant="secondary">
+					Return home
+				</ButtonLink>
+			</section>
+		) : (
+			<div data-work-archive>
+				<div class="mt-10 flex flex-col gap-5 border-y border-border-subtle py-5 sm:flex-row sm:items-end sm:justify-between">
+					{showFilters && (
+						<nav aria-label="Filter projects by category">
+							<ul class="flex flex-wrap gap-2">
+								{filters.map((filter, index) => (
+									<li>
+										<a
+											class="inline-flex min-h-11 items-center gap-2 rounded-md border border-border bg-surface px-4 py-2 text-sm font-medium text-text-muted no-underline transition-colors hover:border-accent hover:text-text-primary aria-[current=page]:border-accent aria-[current=page]:bg-accent aria-[current=page]:text-background"
+											href={filter.id === 'all' ? '/work' : `/work?category=${filter.id}`}
+											aria-current={index === 0 ? 'page' : undefined}
+											aria-controls="project-sections"
+											data-work-filter={filter.id}
+											data-filter-label={filter.label}
+										>
+											{filter.label}
+											<span class="font-mono text-xs opacity-75">{filter.count}</span>
+										</a>
+									</li>
+								))}
+							</ul>
+						</nav>
+					)}
 
-	<div id="project-grid" class="mt-10 grid gap-6 md:grid-cols-2">
-		{
-			projects.map((project) => (
-				<div data-project-card data-project-category={project.data.category}>
-					<ProjectCard project={project} />
+					<p
+						class="text-sm font-medium text-text-muted"
+						role="status"
+						aria-live="polite"
+						aria-atomic="true"
+						data-project-count
+					>
+						{projectCountLabel}
+					</p>
 				</div>
-			))
-		}
-	</div>
 
-	<p
-		class="mt-10 rounded-md border border-border-subtle bg-surface px-5 py-8 text-center text-text-muted"
-		data-empty-state
-		role="status"
-		hidden
-	>
-		No projects in this category yet.
-	</p>
-	<script>
-		const filterButtons = Array.from(
-			document.querySelectorAll<HTMLButtonElement>('[data-work-tab]'),
-		);
-		const projectCards = Array.from(
-			document.querySelectorAll<HTMLElement>('[data-project-card]'),
-		);
-		const emptyState = document.querySelector<HTMLElement>('[data-empty-state]');
+				{showFilters && (
+					<noscript>
+						<p class="mt-4 text-sm leading-6 text-text-muted">
+							Category filtering requires JavaScript. Every project remains listed below.
+						</p>
+					</noscript>
+				)}
 
-		function filterProjects(tabId: string) {
-			let visibleProjects = 0;
+				<div id="project-sections" class="mt-section-tight grid gap-section-tight">
+					{projectSections.map((section, sectionIndex) => (
+						<section
+							aria-labelledby={`${section.id}-title`}
+							data-work-section
+						>
+							<SectionHeader
+								eyebrow={section.eyebrow}
+								title={section.title}
+								description={section.description}
+								titleId={`${section.id}-title`}
+							/>
 
-			projectCards.forEach((card) => {
-				const isVisible = tabId === 'all' || card.dataset.projectCategory === tabId;
+							<ul class="mt-8 grid gap-6 md:grid-cols-2">
+								{section.projects.map((project, projectIndex) => (
+									<li
+										data-project-card
+										data-project-category={project.data.category}
+									>
+										<ProjectCard
+											{project}
+											headingLevel={3}
+											priority={sectionIndex === 0 && projectIndex === 0}
+										/>
+									</li>
+								))}
+							</ul>
+						</section>
+					))}
+				</div>
 
-				card.hidden = !isVisible;
-				if (isVisible) visibleProjects += 1;
-			});
+				<p
+					class="mt-10 rounded-md border border-border-subtle bg-surface px-5 py-8 text-center text-text-muted"
+					data-filter-empty
+					hidden
+				>
+					No published projects match this category. Choose All projects to restore the archive.
+				</p>
+			</div>
+		)
+	}
 
-			filterButtons.forEach((button) => {
-				button.setAttribute('aria-pressed', String(button.dataset.workTab === tabId));
-			});
+	{
+		showFilters && (
+			<script>
+				const archive = document.querySelector<HTMLElement>('[data-work-archive]');
 
-			if (emptyState) emptyState.hidden = visibleProjects > 0;
-		}
+				if (archive) {
+					const filterLinks = Array.from(
+						archive.querySelectorAll<HTMLAnchorElement>('[data-work-filter]'),
+					);
+					const projectCards = Array.from(
+						archive.querySelectorAll<HTMLElement>('[data-project-card]'),
+					);
+					const projectSections = Array.from(
+						archive.querySelectorAll<HTMLElement>('[data-work-section]'),
+					);
+					const projectCount = archive.querySelector<HTMLElement>('[data-project-count]');
+					const emptyState = archive.querySelector<HTMLElement>('[data-filter-empty]');
 
-		filterButtons.forEach((button) => {
-			button.addEventListener('click', () => {
-				const tabId = button.dataset.workTab;
-				if (tabId) filterProjects(tabId);
-			});
-		});
-	</script>
+					function selectedCategory() {
+						const category = new URL(window.location.href).searchParams.get('category');
+
+						return filterLinks.some((link) => link.dataset.workFilter === category)
+							? category ?? 'all'
+							: 'all';
+					}
+
+					function filterProjects(category: string) {
+						let visibleProjects = 0;
+
+						projectCards.forEach((card) => {
+							const isVisible =
+								category === 'all' || card.dataset.projectCategory === category;
+
+							card.hidden = !isVisible;
+							if (isVisible) visibleProjects += 1;
+						});
+
+						projectSections.forEach((section) => {
+							const sectionCards = Array.from(
+								section.querySelectorAll<HTMLElement>('[data-project-card]'),
+							);
+							section.hidden = sectionCards.every((card) => card.hidden);
+						});
+
+						filterLinks.forEach((link) => {
+							if (link.dataset.workFilter === category) {
+								link.setAttribute('aria-current', 'page');
+							} else {
+								link.removeAttribute('aria-current');
+							}
+						});
+
+						const activeFilter = filterLinks.find(
+							(link) => link.dataset.workFilter === category,
+						);
+						const noun = visibleProjects === 1 ? 'project' : 'projects';
+						const categoryLabel = activeFilter?.dataset.filterLabel;
+
+						if (projectCount) {
+							projectCount.textContent =
+								category === 'all'
+									? `${visibleProjects} ${noun}`
+									: `${visibleProjects} ${noun} in ${categoryLabel}`;
+						}
+
+						if (emptyState) emptyState.hidden = visibleProjects > 0;
+					}
+
+					filterLinks.forEach((link) => {
+						link.addEventListener('click', (event) => {
+							event.preventDefault();
+
+							const category = link.dataset.workFilter ?? 'all';
+							const url = new URL(window.location.href);
+
+							if (category === 'all') {
+								url.searchParams.delete('category');
+							} else {
+								url.searchParams.set('category', category);
+							}
+
+							window.history.pushState({}, '', url);
+							filterProjects(category);
+						});
+					});
+
+					window.addEventListener('popstate', () => filterProjects(selectedCategory()));
+					filterProjects(selectedCategory());
+				}
+			</script>
+		)
+	}
 </BaseLayout>
