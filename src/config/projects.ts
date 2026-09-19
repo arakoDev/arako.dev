@@ -25,6 +25,14 @@ export const projectStatusIds = projectStatuses.map(({ id }) => id) as [
 	...ProjectStatus[],
 ];
 
+export const projectStatusLabels = Object.fromEntries(
+	projectStatuses.map(({ id, label }) => [id, label]),
+) as Record<ProjectStatus, string>;
+
+export const projectCategoryLabels = Object.fromEntries(
+	projectCategories.map(({ id, label }) => [id, label]),
+) as Record<ProjectCategory, string>;
+
 export const projectLinkTypes = [
 	{ id: 'game', label: 'Play game' },
 	{ id: 'source', label: 'View source' },

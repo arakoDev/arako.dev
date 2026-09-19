@@ -1,0 +1,43 @@
+---
+import SectionHeader from './SectionHeader.astro';
+
+interface Credit {
+	name: string;
+	role?: string;
+	url?: string;
+}
+
+interface Props {
+	credits: Credit[];
+	class?: string;
+}
+
+const { credits, class: className } = Astro.props;
+---
+
+<section class:list={['border-t border-border-subtle pt-10', className]} aria-labelledby="project-credits-title">
+	<SectionHeader title="Credits" titleId="project-credits-title" />
+	<ul class="mt-5 grid gap-x-8 gap-y-4 sm:grid-cols-2">
+		{
+			credits.map((credit) => (
+				<li>
+					{credit.url ? (
+						<a
+							class="font-semibold text-text-primary"
+							href={credit.url}
+							target="_blank"
+							rel="noopener noreferrer"
+						>
+							{credit.name}
+							<span aria-hidden="true"> ↗</span>
+							<span class="sr-only"> (opens in a new tab)</span>
+						</a>
+					) : (
+						<p class="font-semibold text-text-primary">{credit.name}</p>
+					)}
+					{credit.role && <p class="mt-1 text-sm text-text-muted">{credit.role}</p>}
+				</li>
+			))
+		}
+	</ul>
+</section>

@@ -1,0 +1,56 @@
+---
+interface NavigationTarget {
+	href: string;
+	title: string;
+}
+
+interface Props {
+	nextProject?: NavigationTarget;
+	relatedService?: NavigationTarget;
+	contact?: NavigationTarget;
+	class?: string;
+}
+
+const { nextProject, relatedService, contact, class: className } = Astro.props;
+const links = [
+	{ eyebrow: 'Work archive', title: 'Browse all projects', href: '/work' },
+	...(relatedService
+		? [{ eyebrow: 'Related service', title: relatedService.title, href: relatedService.href }]
+		: []),
+	...(nextProject
+		? [{ eyebrow: 'Next project', title: nextProject.title, href: nextProject.href }]
+		: []),
+	...(contact ? [{ eyebrow: 'Start a project', title: contact.title, href: contact.href }] : []),
+];
+---
+
+<nav class:list={['border-t border-border-subtle pt-10', className]} aria-label="More project pages">
+	<ul
+		class:list={[
+			'grid gap-px overflow-hidden rounded-md border border-border-subtle bg-border-subtle',
+			links.length > 1 && 'sm:grid-cols-2',
+			links.length > 2 && 'lg:grid-cols-3',
+		]}
+	>
+		{
+			links.map((link) => (
+				<li class="bg-surface">
+					<a
+						class="group flex min-h-32 flex-col justify-between p-5 text-text-primary no-underline transition-colors hover:bg-surface-raised"
+						href={link.href}
+					>
+						<span class="text-label font-semibold uppercase tracking-label text-text-muted">
+							{link.eyebrow}
+						</span>
+						<span class="mt-5 flex items-end justify-between gap-4 font-semibold">
+							{link.title}
+							<span class="text-accent transition-transform group-hover:translate-x-1" aria-hidden="true">
+								→
+							</span>
+						</span>
+					</a>
+				</li>
+			))
+		}
+	</ul>
+</nav>

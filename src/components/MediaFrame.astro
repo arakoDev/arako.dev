@@ -1,0 +1,110 @@
+---
+import type { ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
+
+import { getYouTubeEmbedUrl } from '../utils/youtube';
+
+interface Props {
+	image: ImageMetadata;
+	alt: string;
+	title: string;
+	caption?: string;
+	videoUrl?: string;
+	class?: string;
+}
+
+const { image, alt, title, caption, videoUrl, class: className } = Astro.props;
+const embedUrl = videoUrl ? getYouTubeEmbedUrl(videoUrl) : undefined;
+const videoTitle = `${title} video`;
+const responsiveWidths = [
+	...new Set(
+		[480, 768, 960, 1152, image.width].filter((width) => width <= image.width),
+	),
+];
+---
+
+<figure class:list={['m-0', className]}>
+	<div
+		class="relative aspect-video overflow-hidden rounded-md border border-border-subtle bg-surface"
+		data-video-player={embedUrl ? true : undefined}
+	>
+		<Image
+			class="h-full w-full object-cover"
+			src={image}
+			alt={alt}
+			widths={responsiveWidths}
+			sizes="(max-width: 72rem) calc(100vw - 2rem), 72rem"
+		/>
+
+		{
+			embedUrl && (
+				<button
+					class="group absolute inset-0 flex min-h-11 w-full cursor-pointer items-center justify-center border-0 bg-black/35 p-5 text-text-primary transition-colors hover:bg-black/50"
+					type="button"
+					data-video-trigger
+					data-video-src={`${embedUrl}?autoplay=1&rel=0`}
+					data-video-title={videoTitle}
+					aria-label={`Play ${videoTitle}. This loads content from YouTube.`}
+				>
+					<span class="flex items-center gap-3 rounded-md border border-white/35 bg-background/90 px-4 py-3 shadow-lg transition-colors group-hover:border-accent">
+						<svg class="h-5 w-5 text-accent" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+							<path d="M8 5.14v13.72a1 1 0 0 0 1.5.86l10.29-6.86a1 1 0 0 0 0-1.72L9.5 4.28A1 1 0 0 0 8 5.14Z" />
+						</svg>
+						<span class="text-left">
+							<span class="block text-sm font-semibold">Play video</span>
+							<span class="block text-xs text-text-muted">Loads from YouTube</span>
+						</span>
+					</span>
+				</button>
+			)
+		}
+	</div>
+
+	{
+		caption && (
+			<figcaption class="mt-3 border-l-2 border-brass pl-3 text-sm leading-6 text-text-muted">
+				{caption}
+			</figcaption>
+		)
+	}
+
+	{
+		embedUrl && videoUrl && (
+			<noscript>
+				<p class="mt-3 text-sm text-text-muted">
+					<a href={videoUrl} target="_blank" rel="noopener noreferrer">
+						Watch this video on YouTube (opens in a new tab)
+					</a>
+				</p>
+			</noscript>
+		)
+	}
+</figure>
+
+<script>
+	for (const player of document.querySelectorAll<HTMLElement>('[data-video-player]')) {
+		const trigger = player.querySelector<HTMLButtonElement>('[data-video-trigger]');
+
+		if (!trigger || trigger.dataset.videoReady === 'true') continue;
+
+		trigger.dataset.videoReady = 'true';
+		trigger.addEventListener('click', () => {
+			const source = trigger.dataset.videoSrc;
+
+			if (!source) return;
+
+			const iframe = document.createElement('iframe');
+			iframe.className = 'h-full w-full';
+			iframe.src = source;
+			iframe.title = trigger.dataset.videoTitle ?? 'Project video';
+			iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+			iframe.allow =
+				'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+			iframe.allowFullscreen = true;
+			iframe.tabIndex = 0;
+
+			player.replaceChildren(iframe);
+			iframe.focus();
+		});
+	}
+</script>

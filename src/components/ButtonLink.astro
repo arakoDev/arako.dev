@@ -16,7 +16,7 @@ const {
 	target,
 	...attributes
 } = Astro.props;
-const rel = target === '_blank' && !providedRel ? 'noreferrer' : providedRel;
+const rel = target === '_blank' && !providedRel ? 'noopener noreferrer' : providedRel;
 const variants: Record<Variant, string> = {
 	primary: 'border-accent bg-accent px-5 text-background hover:border-accent-strong hover:bg-accent-strong',
 	secondary:

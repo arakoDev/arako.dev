@@ -7,22 +7,15 @@ import {
 	projectLinkTypeIds,
 	projectStatusIds,
 } from './config/projects';
+import { getYouTubeEmbedUrl } from './utils/youtube';
 
 const text = z.string().trim().min(1, 'Value cannot be empty.');
-const youtubeHosts = new Set([
-	'youtu.be',
-	'youtube.com',
-	'www.youtube.com',
-	'm.youtube.com',
-	'youtube-nocookie.com',
-	'www.youtube-nocookie.com',
-]);
-
-const youtubeUrl = z.url().refine((value) => {
-	const url = new URL(value);
-
-	return url.protocol === 'https:' && youtubeHosts.has(url.hostname.toLowerCase());
-}, 'Hero video must be an HTTPS URL on an approved YouTube hostname.');
+const youtubeUrl = z
+	.url()
+	.refine(
+		(value) => getYouTubeEmbedUrl(value) !== undefined,
+		'Hero video must be a valid HTTPS YouTube video URL.',
+	);
 
 const projectUrl = z.url().refine((value) => {
 	const protocol = new URL(value).protocol;
@@ -60,6 +53,15 @@ const projects = defineCollection({
 				client: text.optional(),
 				outcome: text.optional(),
 				confidentiality: text.optional(),
+				credits: z
+					.array(
+						z.object({
+							name: text,
+							role: text.optional(),
+							url: projectUrl.optional(),
+						}),
+					)
+					.default([]),
 				links: z
 					.array(
 						z.object({

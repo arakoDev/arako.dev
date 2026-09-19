@@ -1,60 +1,87 @@
 ---
-import { Image } from 'astro:assets';
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 
 import ButtonLink from '../../components/ButtonLink.astro';
+import MediaFrame from '../../components/MediaFrame.astro';
 import PageHeader from '../../components/PageHeader.astro';
+import ProjectCredits from '../../components/ProjectCredits.astro';
+import ProjectMeta from '../../components/ProjectMeta.astro';
+import ProjectNavigation from '../../components/ProjectNavigation.astro';
 import SectionHeader from '../../components/SectionHeader.astro';
-import { projectLinkLabels } from '../../config/projects';
+import {
+	projectCategoryLabels,
+	projectLinkLabels,
+	projectStatusLabels,
+} from '../../config/projects';
+import { site } from '../../config/site';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
 interface Props {
 	project: CollectionEntry<'projects'>;
+	nextProject?: {
+		id: string;
+		title: string;
+	};
 }
 
 export async function getStaticPaths() {
-	const projects = await getCollection('projects', ({ data }) => !data.draft);
+	const projects = (await getCollection('projects', ({ data }) => !data.draft)).sort(
+		(a, b) =>
+			(a.data.featuredOrder ?? Number.POSITIVE_INFINITY) -
+				(b.data.featuredOrder ?? Number.POSITIVE_INFINITY) ||
+			b.data.year - a.data.year ||
+			a.data.title.localeCompare(b.data.title),
+	);
 
-	return projects.map((project) => ({
-		params: { slug: project.id },
-		props: { project },
-	}));
+	return projects.map((project, index) => {
+		const nextProject =
+			projects.length > 1 ? projects[(index + 1) % projects.length] : undefined;
+
+		return {
+			params: { slug: project.id },
+			props: {
+				project,
+				nextProject: nextProject
+					? { id: nextProject.id, title: nextProject.data.title }
+					: undefined,
+			},
+		};
+	});
 }
 
-function getYouTubeEmbedUrl(videoUrl?: string) {
-	if (!videoUrl) return undefined;
-
-	const url = new URL(videoUrl);
-	const hostname = url.hostname.replace(/^www\./, '');
-	let videoId: string | null | undefined;
-
-	if (hostname === 'youtu.be') {
-		videoId = url.pathname.split('/').filter(Boolean)[0];
-	} else if (hostname.endsWith('youtube.com') || hostname.endsWith('youtube-nocookie.com')) {
-		videoId = url.searchParams.get('v');
-
-		if (!videoId) {
-			const [route, id] = url.pathname.split('/').filter(Boolean);
-
-			if (['embed', 'live', 'shorts'].includes(route)) {
-				videoId = id;
-			}
-		}
-	}
-
-	return videoId
-		? `https://www.youtube-nocookie.com/embed/${encodeURIComponent(videoId)}`
-		: undefined;
-}
-
-const { project } = Astro.props;
+const { project, nextProject } = Astro.props;
 const { Content } = await render(project);
-const { heroAlt, heroImage, heroVideo, links, summary, title, year } = project.data;
-const videoEmbedUrl = getYouTubeEmbedUrl(heroVideo);
+const {
+	category,
+	client,
+	confidentiality,
+	credits,
+	duration,
+	heroAlt,
+	heroCaption,
+	heroImage,
+	heroVideo,
+	links,
+	outcome,
+	role,
+	services,
+	status,
+	summary,
+	tags,
+	team,
+	title,
+	year,
+} = project.data;
 const projectLinks = links.map((link) => ({
 	...link,
 	label: link.label ?? projectLinkLabels[link.type],
 }));
+const contactNavigation = site.contact.inquiryUrl
+	? { href: site.contact.inquiryUrl, title: 'Contact Arako' }
+	: undefined;
+const relatedServiceNavigation = site.navigation.some(({ href }) => href === '/services')
+	? { href: '/services', title: services[0] ?? 'Services' }
+	: undefined;
 ---
 
 <BaseLayout
@@ -62,50 +89,100 @@ const projectLinks = links.map((link) => ({
 	description={summary}
 	mainClass="mx-auto w-full max-w-content px-page py-section"
 >
-	<article class="max-w-4xl">
-		<ButtonLink href="/work" variant="text">&larr; Back to work</ButtonLink>
+	<article>
+		<div class="max-w-4xl">
+			<ButtonLink href="/work" variant="text">&larr; Back to work</ButtonLink>
 
-		<PageHeader class="mt-8" eyebrow={year} {title} description={summary} />
+			<PageHeader
+				class="mt-8"
+				eyebrow={`${projectCategoryLabels[category]} · ${year}`}
+				{title}
+				description={summary}
+			/>
+		</div>
 
-		{
-			videoEmbedUrl ? (
-				<div class="mt-10 aspect-video overflow-hidden rounded-md border border-border-subtle bg-surface">
-					<iframe
-						class="h-full w-full"
-						src={videoEmbedUrl}
-						title={`${title} video`}
-						loading="lazy"
-						referrerpolicy="strict-origin-when-cross-origin"
-						allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-						allowfullscreen
-					/>
-				</div>
-			) : (
-				<Image
-					class="mt-10 aspect-video w-full rounded-md border border-border-subtle object-cover"
-					src={heroImage}
-					alt={heroAlt}
-				/>
-			)
-		}
+		<ProjectMeta
+			class="mt-10"
+			{year}
+			{role}
+			{duration}
+			status={projectStatusLabels[status]}
+			{team}
+			{client}
+			{services}
+			{tags}
+		/>
+
+		<MediaFrame
+			class="mt-10"
+			image={heroImage}
+			alt={heroAlt}
+			{title}
+			caption={heroCaption}
+			videoUrl={heroVideo}
+		/>
 
 		<div class="prose-portfolio mt-12 max-w-reading border-t border-border-subtle pt-10">
 			<Content />
 		</div>
 
 		{
+			outcome && (
+				<section
+					class="mt-12 max-w-reading border-t border-border-subtle pt-10"
+					aria-labelledby="project-outcome-title"
+				>
+					<SectionHeader title="Outcome" titleId="project-outcome-title" />
+					<p class="mt-5 leading-7 text-text-muted">{outcome}</p>
+				</section>
+			)
+		}
+
+		{
+			confidentiality && (
+				<aside class="mt-10 max-w-reading border-l-2 border-brass bg-surface px-5 py-4">
+					<p class="text-label font-semibold uppercase tracking-label text-text-primary">
+						Confidentiality note
+					</p>
+					<p class="mt-2 text-sm leading-6 text-text-muted">{confidentiality}</p>
+				</aside>
+			)
+		}
+
+		{credits.length > 0 && <ProjectCredits class="mt-12 max-w-reading" {credits} />}
+
+		{
 			projectLinks.length > 0 && (
-				<section class="mt-12 border-t border-border-subtle pt-10" aria-labelledby="project-links-title">
+				<section
+					class="mt-12 max-w-reading border-t border-border-subtle pt-10"
+					aria-labelledby="project-links-title"
+				>
 					<SectionHeader title="Project links" titleId="project-links-title" />
 					<div class="mt-5 flex flex-wrap gap-3">
 						{projectLinks.map((link) => (
-							<ButtonLink href={link.url} target="_blank" variant="secondary">
+							<ButtonLink
+								class="gap-2"
+								href={link.url}
+								target="_blank"
+								variant="secondary"
+								aria-label={`${link.label} for ${title} (opens in a new tab)`}
+							>
 								{link.label}
+								<span aria-hidden="true">↗</span>
 							</ButtonLink>
 						))}
 					</div>
 				</section>
 			)
 		}
+
+		<ProjectNavigation
+			class="mt-section-tight"
+			relatedService={relatedServiceNavigation}
+			nextProject={nextProject
+				? { href: `/work/${nextProject.id}`, title: nextProject.title }
+				: undefined}
+			contact={contactNavigation}
+		/>
 	</article>
 </BaseLayout>
