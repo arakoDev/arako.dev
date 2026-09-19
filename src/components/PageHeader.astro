@@ -1,0 +1,29 @@
+---
+interface Props {
+	eyebrow?: string | number;
+	title: string;
+	description?: string;
+	titleId?: string;
+	class?: string;
+}
+
+const { eyebrow, title, description, titleId, class: className } = Astro.props;
+---
+
+<header class:list={['max-w-reading', className]}>
+	{
+		eyebrow !== undefined && (
+			<p class="m-0 text-label font-semibold uppercase tracking-label text-accent">{eyebrow}</p>
+		)
+	}
+	<h1
+		id={titleId}
+		class:list={[
+			'text-page-title font-semibold text-text-primary',
+			eyebrow !== undefined ? 'mt-3' : 'm-0',
+		]}
+	>
+		{title}
+	</h1>
+	{description && <p class="mt-5 text-lede text-text-muted">{description}</p>}
+</header>

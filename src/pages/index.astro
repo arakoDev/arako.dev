@@ -1,4 +1,5 @@
 ---
+import ButtonLink from '../components/ButtonLink.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
@@ -18,34 +19,21 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 			/>
 
 			<div class="max-w-3xl">
-				<p class="mb-4 text-sm font-semibold uppercase tracking-[0.18em] text-accent">
+				<p class="mb-4 text-label font-semibold uppercase tracking-label text-accent">
 					Roblox Scripter
 				</p>
-				<h1
-					id="hero-title"
-					class="m-0 text-5xl font-semibold tracking-[-0.04em] text-text-primary sm:text-7xl lg:text-8xl"
-				>
+				<h1 id="hero-title" class="m-0 text-display font-semibold text-text-primary">
 					Arako
 				</h1>
-				<p class="mt-6 max-w-2xl text-base leading-7 text-text-muted sm:text-lg sm:leading-8">
+				<p class="mt-6 max-w-reading text-lede text-text-muted">
 					Roblox Scripter with over 5 years of coding experience and 2 years of experience
 					developing on Roblox. I focus on writing clean, organized, and optimized code,
 					ensuring scalability, maintainability, and consistent performance across projects.
 				</p>
 
 				<div class="mt-8 flex flex-col gap-3 sm:flex-row">
-					<a
-						class="inline-flex items-center justify-center rounded-md bg-accent px-5 py-3 text-sm font-semibold text-background no-underline hover:bg-accent/90"
-						href="/work"
-					>
-						View Work
-					</a>
-					<a
-						class="inline-flex items-center justify-center rounded-md border border-border bg-surface px-5 py-3 text-sm font-semibold text-text-primary no-underline hover:border-accent/50 hover:text-accent"
-						href="#contact"
-					>
-						Contact
-					</a>
+					<ButtonLink href="/work">View Work</ButtonLink>
+					<ButtonLink href="#contact" variant="secondary">Contact</ButtonLink>
 				</div>
 			</div>
 		</div>

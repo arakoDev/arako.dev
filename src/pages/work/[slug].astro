@@ -1,6 +1,9 @@
 ---
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 
+import ButtonLink from '../../components/ButtonLink.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import SectionHeader from '../../components/SectionHeader.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
 interface Props {
@@ -64,72 +67,50 @@ const projectLinks = [
 	{description}
 	mainClass="mx-auto w-full max-w-content px-page py-section"
 >
-			<article class="max-w-4xl">
-				<a
-					class="inline-flex min-h-11 items-center text-sm font-medium text-text-muted no-underline hover:text-accent"
-					href="/work"
-				>
-					&larr; Back to work
-				</a>
+	<article class="max-w-4xl">
+		<ButtonLink href="/work" variant="text">&larr; Back to work</ButtonLink>
 
-				<header class="mt-8 max-w-3xl">
-					<p class="m-0 text-sm font-semibold uppercase tracking-[0.14em] text-accent">{year}</p>
-					<h1 class="mt-3 text-4xl font-semibold tracking-[-0.03em] text-text-primary sm:text-6xl">
-						{title}
-					</h1>
-					<p class="mt-5 text-base leading-7 text-text-muted sm:text-lg sm:leading-8">
-						{description}
-					</p>
-				</header>
+		<PageHeader class="mt-8" eyebrow={year} {title} {description} />
 
-				{
-					videoEmbedUrl ? (
-						<div class="mt-10 aspect-video overflow-hidden rounded-md border border-border bg-surface">
-							<iframe
-								class="h-full w-full"
-								src={videoEmbedUrl}
-								title={`${title} video`}
-								loading="lazy"
-								referrerpolicy="strict-origin-when-cross-origin"
-								allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-								allowfullscreen
-							/>
-						</div>
-					) : (
-						<img
-							class="mt-10 aspect-video w-full rounded-md border border-border object-cover"
-							src={thumbnail}
-							alt={`${title} thumbnail`}
-						/>
-					)
-				}
-
-				<div
-					class="mt-12 max-w-3xl border-t border-border pt-10 text-text-muted [&_a]:text-accent [&_h2]:mt-10 [&_h2]:text-2xl [&_h2]:font-semibold [&_h2]:text-text-primary [&_h3]:mt-8 [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:text-text-primary [&_li]:mt-2 [&_ol]:mt-5 [&_ol]:list-decimal [&_ol]:pl-6 [&_p]:mt-5 [&_p]:leading-7 [&_strong]:text-text-primary [&_ul]:mt-5 [&_ul]:list-disc [&_ul]:pl-6"
-				>
-					<Content />
+		{
+			videoEmbedUrl ? (
+				<div class="mt-10 aspect-video overflow-hidden rounded-md border border-border-subtle bg-surface">
+					<iframe
+						class="h-full w-full"
+						src={videoEmbedUrl}
+						title={`${title} video`}
+						loading="lazy"
+						referrerpolicy="strict-origin-when-cross-origin"
+						allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+						allowfullscreen
+					/>
 				</div>
+			) : (
+				<img
+					class="mt-10 aspect-video w-full rounded-md border border-border-subtle object-cover"
+					src={thumbnail}
+					alt={`${title} thumbnail`}
+				/>
+			)
+		}
 
-				{
-					projectLinks.length > 0 && (
-						<section class="mt-12 border-t border-border pt-10" aria-labelledby="project-links-title">
-							<h2 id="project-links-title" class="text-xl font-semibold text-text-primary">
-								Project links
-							</h2>
-							<div class="mt-5 flex flex-wrap gap-3">
-								{projectLinks.map((link) => (
-									<a
-										class="inline-flex items-center justify-center rounded-md border border-border bg-surface px-4 py-2.5 text-sm font-semibold text-text-primary no-underline hover:border-accent/50 hover:text-accent"
-										href={link.url}
-										target="_blank"
-										rel="noreferrer"
-									>
-										{link.label}
-									</a>
-								))}
-							</div>
-						</section>
-					)
-				}
-			</article>
+		<div class="prose-portfolio mt-12 max-w-reading border-t border-border-subtle pt-10">
+			<Content />
+		</div>
+
+		{
+			projectLinks.length > 0 && (
+				<section class="mt-12 border-t border-border-subtle pt-10" aria-labelledby="project-links-title">
+					<SectionHeader title="Project links" titleId="project-links-title" />
+					<div class="mt-5 flex flex-wrap gap-3">
+						{projectLinks.map((link) => (
+							<ButtonLink href={link.url} target="_blank" variant="secondary">
+								{link.label}
+							</ButtonLink>
+						))}
+					</div>
+				</section>
+			)
+		}
+	</article>
 </BaseLayout>

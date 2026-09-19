@@ -1,0 +1,40 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+type Variant = 'primary' | 'secondary' | 'text';
+
+type Props = Omit<HTMLAttributes<'a'>, 'href'> & {
+	href: string;
+	variant?: Variant;
+};
+
+const {
+	href,
+	variant = 'primary',
+	class: className,
+	rel: providedRel,
+	target,
+	...attributes
+} = Astro.props;
+const rel = target === '_blank' && !providedRel ? 'noreferrer' : providedRel;
+const variants: Record<Variant, string> = {
+	primary: 'border-accent bg-accent px-5 text-background hover:border-accent-strong hover:bg-accent-strong',
+	secondary:
+		'border-border bg-surface px-5 text-text-primary hover:border-accent hover:text-accent',
+	text: 'border-transparent px-0 text-accent hover:text-accent-strong',
+};
+---
+
+<a
+	{...attributes}
+	{href}
+	{target}
+	{rel}
+	class:list={[
+		'inline-flex min-h-11 items-center justify-center rounded-md border py-2.5 text-sm font-semibold no-underline transition-colors',
+		variants[variant],
+		className,
+	]}
+>
+	<slot />
+</a>

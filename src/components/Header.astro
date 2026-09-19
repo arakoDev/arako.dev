@@ -16,10 +16,10 @@ function isCurrentPage(href: string) {
 }
 ---
 
-<header class="border-b border-border bg-background">
+<header class="border-b border-border-subtle bg-background">
 	<div class="mx-auto flex max-w-content items-center justify-between gap-3 px-page py-2.5">
 		<a
-			class="inline-flex min-h-11 min-w-11 shrink-0 items-center rounded-md px-2 text-base font-semibold tracking-tight text-text-primary no-underline hover:text-accent"
+			class="inline-flex min-h-11 min-w-11 shrink-0 items-center rounded-md px-2 text-base font-semibold tracking-tight text-text-primary no-underline transition-colors hover:text-accent"
 			href="/"
 			aria-label={`${site.name} home`}
 		>
@@ -36,7 +36,7 @@ function isCurrentPage(href: string) {
 							<li>
 								<a
 									class:list={[
-										'inline-flex min-h-11 items-center justify-center rounded-md border px-3 text-sm font-medium no-underline',
+										'inline-flex min-h-11 items-center justify-center rounded-md border px-3 text-sm font-medium no-underline transition-colors',
 										isCurrent
 											? 'border-border bg-surface text-text-primary'
 											: 'border-transparent text-text-muted hover:border-border hover:bg-surface hover:text-text-primary',

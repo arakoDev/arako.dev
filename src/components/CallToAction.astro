@@ -1,0 +1,32 @@
+---
+interface Props {
+	title: string;
+	description?: string;
+	headingId?: string;
+	class?: string;
+}
+
+const { title, description, headingId, class: className } = Astro.props;
+const headingSlug =
+	title
+		.toLowerCase()
+		.replace(/[^a-z0-9]+/g, '-')
+		.replace(/(^-|-$)/g, '') || 'call-to-action';
+const resolvedHeadingId =
+	headingId ?? `${headingSlug}-title`;
+const hasActions = Astro.slots.has('actions');
+---
+
+<section
+	class:list={[
+		'flex flex-col gap-stack rounded-md border border-border-subtle bg-surface p-6 sm:p-8 md:flex-row md:items-center md:justify-between',
+		className,
+	]}
+	aria-labelledby={resolvedHeadingId}
+>
+	<div class="max-w-reading">
+		<h2 id={resolvedHeadingId} class="text-section-title font-semibold text-text-primary">{title}</h2>
+		{description && <p class="mt-3 text-base leading-7 text-text-muted">{description}</p>}
+	</div>
+	{hasActions && <div class="flex shrink-0 flex-wrap gap-3"><slot name="actions" /></div>}
+</section>

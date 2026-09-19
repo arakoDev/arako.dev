@@ -35,7 +35,7 @@ export const site = {
 	name: 'Arako',
 	language: 'en',
 	defaultDescription: "Arako's portfolio showcasing Roblox scripting and development experience.",
-	themeColor: '#080b11',
+	themeColor: '#080b12',
 	navigation: [
 		{ label: 'Home', href: '/' },
 		{ label: 'Work', href: '/work' },
