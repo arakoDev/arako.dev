@@ -8,7 +8,7 @@ categories:
 heroImage: "./hero.webp"
 heroAlt: "A Roblox avatar holding a dark purple energy sphere in a purple-lit Studio playtest."
 heroVideo: "https://www.youtube.com/watch?v=HdLZrNiFisA"
-featuredOrder: 7
+featuredOrder: 8
 draft: false
 links:
   - type: "demo"

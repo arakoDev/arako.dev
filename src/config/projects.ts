@@ -2,7 +2,8 @@ export const projectCategories = [
 	{ id: 'gameplay', label: 'Gameplay' },
 	{ id: 'combat', label: 'Combat' },
 	{ id: 'combat-skills', label: 'Combat Skills' },
-	{ id: 'open-source', label: 'Open source' },
+	{ id: 'open-source', label: 'Open Source' },
+	{ id: 'tool', label: 'Tool' },
 	{ id: 'prototypes', label: 'Prototypes' },
 ] as const;
 

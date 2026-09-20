@@ -27,11 +27,19 @@ function isCurrentNavigationItem(item: (typeof site.navigation)[number]) {
 <header class="motion-site-header border-b border-border-subtle bg-background">
 	<div class="mx-auto flex max-w-content items-center justify-between gap-1 px-page py-2.5 sm:gap-3">
 		<a
-			class="motion-nav inline-flex min-h-11 min-w-11 shrink-0 items-center rounded-md px-1 text-base font-semibold tracking-tight text-text-primary no-underline hover:text-accent sm:px-2"
+			class="motion-nav inline-flex min-h-11 min-w-11 shrink-0 items-center gap-2 rounded-md px-1 text-base font-semibold tracking-tight text-text-primary no-underline hover:text-accent sm:px-2"
 			href="/"
 			aria-label={`${site.name} home`}
 			aria-current={isHome ? 'page' : undefined}
 		>
+			<img
+				class="h-8 w-8 rounded-full border border-border object-cover"
+				src="/images/arako.jpg"
+				alt=""
+				width="32"
+				height="32"
+				decoding="async"
+			/>
 			{site.name}
 		</a>
 

@@ -7,7 +7,7 @@ categories:
 heroImage: "./hero.webp"
 heroAlt: "A split-screen Roblox Studio test showing a purple stand in blocking and parrying poses."
 heroVideo: "https://www.youtube.com/watch?v=HKzwptDzXEo"
-featuredOrder: 6
+featuredOrder: 7
 draft: false
 links:
   - type: "demo"

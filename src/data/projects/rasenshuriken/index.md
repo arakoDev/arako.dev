@@ -8,7 +8,7 @@ categories:
 heroImage: "./hero.webp"
 heroAlt: "A Roblox avatar facing several training targets with Rasenshuriken selected on the ability hotbar."
 heroVideo: "https://www.youtube.com/watch?v=Z5gmZ7U6vVU"
-featuredOrder: 9
+featuredOrder: 10
 draft: false
 links:
   - type: "demo"

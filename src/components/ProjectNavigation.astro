@@ -6,17 +6,15 @@ interface NavigationTarget {
 
 interface Props {
 	nextProject?: NavigationTarget;
-	contact?: NavigationTarget;
 	class?: string;
 }
 
-const { nextProject, contact, class: className } = Astro.props;
+const { nextProject, class: className } = Astro.props;
 const links = [
 	{ eyebrow: 'Work archive', title: 'Browse all projects', href: '/work' },
 	...(nextProject
 		? [{ eyebrow: 'Next project', title: nextProject.title, href: nextProject.href }]
 		: []),
-	...(contact ? [{ eyebrow: 'Start a project', title: contact.title, href: contact.href }] : []),
 ];
 ---
 
@@ -25,7 +23,6 @@ const links = [
 		class:list={[
 			'grid gap-px overflow-hidden rounded-md border border-border-subtle bg-border-subtle',
 			links.length > 1 && 'sm:grid-cols-2',
-			links.length > 2 && 'lg:grid-cols-3',
 		]}
 	>
 		{

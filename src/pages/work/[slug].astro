@@ -63,7 +63,6 @@ const projectLinks = links.map((link) => ({
 	label: link.label ?? projectLinkLabels[link.type],
 }));
 const categoryLabel = categories.map((category) => projectCategoryLabels[category]).join(' · ');
-const contactNavigation = { href: '/commissions', title: 'Commission info' };
 ---
 
 <BaseLayout
@@ -162,7 +161,6 @@ const contactNavigation = { href: '/commissions', title: 'Commission info' };
 			nextProject={nextProject
 				? { href: `/work/${nextProject.id}`, title: nextProject.title }
 				: undefined}
-			contact={contactNavigation}
 		/>
 	</article>
 </BaseLayout>

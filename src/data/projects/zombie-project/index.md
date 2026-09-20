@@ -6,7 +6,7 @@ categories:
 heroImage: "./hero.webp"
 heroAlt: "A split-screen Roblox test showing survivor and zombie players during a timed team round."
 heroVideo: "https://www.youtube.com/watch?v=ZadadHgiJeo"
-featuredOrder: 13
+featuredOrder: 14
 draft: false
 links:
   - type: "demo"

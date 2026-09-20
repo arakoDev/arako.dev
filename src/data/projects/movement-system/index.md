@@ -6,7 +6,7 @@ categories:
 heroImage: "./hero.webp"
 heroAlt: "A Roblox avatar running across a wooden platform during a movement playtest in Roblox Studio."
 heroVideo: "https://www.youtube.com/watch?v=d18Nj-USFMU"
-featuredOrder: 4
+featuredOrder: 5
 draft: false
 links:
   - type: "demo"
