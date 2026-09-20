@@ -35,7 +35,7 @@ interface SiteConfig {
 export const site = {
 	name: 'Arako',
 	language: 'en',
-	defaultDescription: 'Arako is a Roblox Scripter focused on combat, movement, abilities, and game systems.',
+	defaultDescription: 'Roblox scripter with over 5 years of coding experience and 2 years working with Roblox. I focus on building reliable, well-structured systems that are easy to maintain and expand as a project grows.',
 	themeColor: '#080b12',
 	navigation: [
 		{ label: 'Work', href: '/work' },
