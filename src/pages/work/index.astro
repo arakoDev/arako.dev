@@ -153,7 +153,7 @@ const projectCountLabel = `${projects.length} ${projects.length === 1 ? 'project
 								titleId={`${section.id}-title`}
 							/>
 
-							<ul class="mt-8 grid gap-6 md:grid-cols-2">
+							<ul class="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
 								{section.projects.map((project, projectIndex) => (
 									<li
 										data-project-card
@@ -189,6 +189,17 @@ const projectCountLabel = `${projects.length} ${projects.length === 1 ? 'project
 				const archive = document.querySelector<HTMLElement>('[data-work-archive]');
 
 				if (archive) {
+					const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
+					const rootStyles = getComputedStyle(document.documentElement);
+					const motionFast =
+						Number.parseFloat(rootStyles.getPropertyValue('--motion-duration-fast')) || 170;
+					const motionBase =
+						Number.parseFloat(rootStyles.getPropertyValue('--motion-duration-base')) || 270;
+					const motionSlow =
+						Number.parseFloat(rootStyles.getPropertyValue('--motion-duration-slow')) || 650;
+					const motionEase =
+						rootStyles.getPropertyValue('--motion-ease-out').trim() ||
+						'cubic-bezier(0.16, 1, 0.3, 1)';
 					const filterLinks = Array.from(
 						archive.querySelectorAll<HTMLAnchorElement>('[data-work-filter]'),
 					);
@@ -200,6 +211,28 @@ const projectCountLabel = `${projects.length} ${projects.length === 1 ? 'project
 					);
 					const projectCount = archive.querySelector<HTMLElement>('[data-project-count]');
 					const emptyState = archive.querySelector<HTMLElement>('[data-filter-empty]');
+					const runningAnimations = new Set<Animation>();
+					let filterSequence = 0;
+
+					function trackAnimation(animation: Animation) {
+						runningAnimations.add(animation);
+						const forgetAnimation = () => runningAnimations.delete(animation);
+
+						animation.addEventListener('finish', forgetAnimation, { once: true });
+						animation.addEventListener('cancel', forgetAnimation, { once: true });
+						return animation;
+					}
+
+					function cancelRunningAnimations() {
+						runningAnimations.forEach((animation) => animation.cancel());
+						runningAnimations.clear();
+					}
+
+					function isNearViewport(element: HTMLElement) {
+						const bounds = element.getBoundingClientRect();
+
+						return bounds.bottom > -96 && bounds.top < window.innerHeight + 96;
+					}
 
 					function selectedCategory() {
 						const category = new URL(window.location.href).searchParams.get('category');
@@ -209,7 +242,64 @@ const projectCountLabel = `${projects.length} ${projects.length === 1 ? 'project
 							: 'all';
 					}
 
-					function filterProjects(category: string) {
+					async function filterProjects(category: string, animateChanges = false) {
+						const sequence = ++filterSequence;
+						const previousCategory = filterLinks.find(
+							(link) => link.getAttribute('aria-current') === 'page',
+						)?.dataset.workFilter;
+						const categoryChanged = previousCategory !== category;
+						const shouldAnimate = animateChanges && !motionPreference.matches;
+						const shouldAnimateCards = shouldAnimate && categoryChanged;
+
+						cancelRunningAnimations();
+
+						filterLinks.forEach((link) => {
+							if (link.dataset.workFilter === category) {
+								link.setAttribute('aria-current', 'page');
+							} else {
+								link.removeAttribute('aria-current');
+							}
+						});
+
+						const activeFilter = filterLinks.find(
+							(link) => link.dataset.workFilter === category,
+						);
+
+						if (shouldAnimate && activeFilter) {
+							trackAnimation(
+								activeFilter.animate(
+									[
+										{ transform: 'scale(0.97)' },
+										{ transform: 'scale(1)' },
+									],
+									{ duration: motionBase, easing: motionEase },
+								),
+							);
+						}
+
+						if (shouldAnimateCards) {
+							const outgoingCards = projectCards.filter(
+								(card) => !card.hidden && isNearViewport(card),
+							);
+							const outgoingAnimations = outgoingCards.map((card) =>
+								trackAnimation(
+									card.animate(
+										[
+											{ opacity: 1, transform: 'translateY(0) scale(1)' },
+											{ opacity: 0, transform: 'translateY(-0.35rem) scale(0.99)' },
+										],
+										{ duration: motionFast, easing: motionEase, fill: 'forwards' },
+									),
+								),
+							);
+
+							await Promise.all(
+								outgoingAnimations.map((animation) => animation.finished.catch(() => undefined)),
+							);
+							outgoingAnimations.forEach((animation) => animation.cancel());
+							if (sequence !== filterSequence) return;
+						}
+
 						let visibleProjects = 0;
 
 						projectCards.forEach((card) => {
@@ -228,17 +318,6 @@ const projectCountLabel = `${projects.length} ${projects.length === 1 ? 'project
 							section.hidden = sectionCards.every((card) => card.hidden);
 						});
 
-						filterLinks.forEach((link) => {
-							if (link.dataset.workFilter === category) {
-								link.setAttribute('aria-current', 'page');
-							} else {
-								link.removeAttribute('aria-current');
-							}
-						});
-
-						const activeFilter = filterLinks.find(
-							(link) => link.dataset.workFilter === category,
-						);
 						const noun = visibleProjects === 1 ? 'project' : 'projects';
 						const categoryLabel = activeFilter?.dataset.filterLabel;
 
@@ -250,6 +329,45 @@ const projectCountLabel = `${projects.length} ${projects.length === 1 ? 'project
 						}
 
 						if (emptyState) emptyState.hidden = visibleProjects > 0;
+
+						if (!shouldAnimateCards) return;
+
+						await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+						if (sequence !== filterSequence) return;
+
+						const incomingCards = projectCards.filter(
+							(card) => !card.hidden && isNearViewport(card),
+						);
+
+						incomingCards.forEach((card, index) => {
+							card.querySelector<HTMLElement>('[data-reveal]')?.classList.add('is-revealed');
+							trackAnimation(
+								card.animate(
+									[
+										{ opacity: 0, transform: 'translateY(0.75rem) scale(0.985)' },
+										{ opacity: 1, transform: 'translateY(0) scale(1)' },
+									],
+									{
+										duration: motionSlow,
+										delay: Math.min(index, 5) * 45,
+										easing: motionEase,
+										fill: 'backwards',
+									},
+								),
+							);
+						});
+
+						if (projectCount) {
+							trackAnimation(
+								projectCount.animate(
+									[
+										{ opacity: 0, transform: 'translateY(0.25rem)' },
+										{ opacity: 1, transform: 'translateY(0)' },
+									],
+									{ duration: motionBase, easing: motionEase },
+								),
+							);
+						}
 					}
 
 					filterLinks.forEach((link) => {
@@ -266,12 +384,14 @@ const projectCountLabel = `${projects.length} ${projects.length === 1 ? 'project
 							}
 
 							window.history.pushState({}, '', url);
-							filterProjects(category);
+							void filterProjects(category, true);
 						});
 					});
 
-					window.addEventListener('popstate', () => filterProjects(selectedCategory()));
-					filterProjects(selectedCategory());
+					window.addEventListener('popstate', () => {
+						void filterProjects(selectedCategory(), true);
+					});
+					void filterProjects(selectedCategory());
 				}
 			</script>
 		)
