@@ -14,3 +14,11 @@ links:
     url: "https://www.youtube.com/watch?v=HKzwptDzXEo"
     label: "Watch on YouTube"
 ---
+
+## Core mechanics
+
+The system adds defensive options built around guard management and precise timing:
+
+- **Block:** Defends against incoming attacks while a visible guard bar tracks the block's remaining durability.
+- **Block break:** Breaks the character's defense and stuns them when the guard bar is fully depleted.
+- **Parry:** Blocking within the correct timing window just before an attack lands parries the hit and stuns the attacker.

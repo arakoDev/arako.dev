@@ -16,3 +16,15 @@ links:
     url: "https://www.youtube.com/watch?v=77vMhEBMJ8k"
     label: "Watch on YouTube"
 ---
+
+## Core mechanics
+
+The prototype recreates the central gameplay loop of Blade Ball through three core systems:
+
+- **Ball tracking:** The server calculates the ball's movement and target tracking, while each client handles its rendering.
+- **Retargeting:** Assigns a new target to the ball after it is successfully deflected.
+- **Round system:** Handles starting, running, and resetting matches between players.
+
+## Explore the source code
+
+To create an editable copy of the project and inspect or modify its code, open the <a href="https://www.roblox.com/games/78948200581163/Blade-Ball-Prototype" target="_blank" rel="noopener noreferrer">Roblox page</a>, select the three-dot menu (`⋯`), and choose **Edit in Studio**.
