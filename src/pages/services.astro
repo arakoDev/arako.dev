@@ -1,0 +1,314 @@
+---
+import ButtonLink from '../components/ButtonLink.astro';
+import CallToAction from '../components/CallToAction.astro';
+import PageHeader from '../components/PageHeader.astro';
+import SectionHeader from '../components/SectionHeader.astro';
+import { site } from '../config/site';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const inquiryUrl = site.contact.inquiryUrl ?? `mailto:${site.contact.email}`;
+
+const services = [
+  {
+    number: '01',
+    title: 'Gameplay and combat systems',
+    description:
+      'Responsive Roblox mechanics built as focused features or reusable foundations for larger games.',
+    includes: [
+      'M1 chains, dashes, blocks, parries, air combat, hit logic, and state handling',
+      'Cooldowns, combo rules, combat flow, and integration with existing systems',
+      'Modular combat foundations for battlegrounds, RPG, and action games',
+    ],
+    fit: 'Teams that need a core combat loop, a substantial extension to an existing one, or cleaner foundations for future mechanics.',
+    inputs:
+      'Your current codebase or architecture, the intended mechanics, references, available animations and effects, and any integration constraints.',
+    exclusions:
+      'Animation, visual-effect, sound, or interface asset creation is not included unless it is explicitly part of the quote.',
+    pricing:
+      'Small combat additions can fall within Simple or Intermediate work. Complete modular combat or battlegrounds foundations are Advanced and receive a custom quote.',
+    links: [
+      { label: 'Battlegrounds Combat', href: '/work/battlegrounds-combat' },
+      { label: 'Browse combat work', href: '/work?category=combat' },
+    ],
+  },
+  {
+    number: '02',
+    title: 'Abilities and character mechanics',
+    description:
+      'Character abilities that feel deliberate, readable, and compatible with the rest of your game.',
+    includes: [
+      'Ability behavior, inputs, cooldowns, state transitions, and hit detection',
+      'Single skills, movesets, character mechanics, and reusable ability architecture',
+      'Hooks for provided animation, VFX, sound, damage, and combat systems',
+    ],
+    fit: 'Projects that need one polished mechanic, a set of connected skills, or a flexible system for adding more abilities later.',
+    inputs:
+      'A clear behavior description, visual references, expected controls, supplied assets, and the combat or character architecture the work must connect to.',
+    exclusions:
+      'Custom visual assets and unrelated character systems are excluded by default. A full ability framework is scoped separately from an individual skill.',
+    pricing:
+      'An isolated, well-defined ability may be Simple or Intermediate. Larger movesets and reusable skill frameworks are quoted according to their full scope.',
+    links: [
+      { label: 'Browse combat skills', href: '/work?category=combat-skills' },
+      { label: 'Stand Combat', href: '/work/stand-combat' },
+    ],
+  },
+  {
+    number: '03',
+    title: 'Game systems, integrations, and fixes',
+    description:
+      'Practical systems and targeted engineering for games that need a feature shipped or an existing problem solved.',
+    includes: [
+      'Tools, interactions, leaderstats, shops, UI logic, and bug fixes',
+      'Inventories, quests, rounds, progression, matchmaking, and wave logic',
+      'DataStore integration and additions to an existing codebase',
+    ],
+    fit: 'Existing projects with a defined feature, integration, or technical issue, as well as new games that need a self-contained system.',
+    inputs:
+      'Relevant project files, reproduction steps when applicable, data and integration requirements, references, and the expected deadline.',
+    exclusions:
+      'A vague full-game build, third-party costs, and features outside the agreed scope are not included in the original quote.',
+    pricing:
+      'Focused fixes and additions often fit the Simple range. Connected systems can be Intermediate, while complete modular frameworks are Advanced.',
+    links: [
+      { label: 'Browse gameplay work', href: '/work?category=gameplay' },
+      { label: 'Movement System', href: '/work/movement-system' },
+    ],
+  },
+] as const;
+
+const priceRanges = [
+  {
+    label: 'Simple',
+    range: '$20–$60',
+    description:
+      'Small, isolated work such as tools, interactions, cooldowns, leaderstats, simple shops, UI logic, bug fixes, or minor additions to existing code.',
+  },
+  {
+    label: 'Intermediate',
+    range: '$60–$100',
+    description:
+      'More involved work such as inventories, quests, round logic, abilities, progression, DataStore integration, matchmaking, wave logic, or multi-part features.',
+  },
+  {
+    label: 'Advanced / Frameworks',
+    range: '$100–$500+',
+    description:
+      'Complete or highly modular combat, ability, FPS, tower defense, battlegrounds, inventory, loot, progression, or RPG frameworks.',
+  },
+] as const;
+
+const paymentMethods = ['Wise', 'PayPal', 'Robux', 'USDT', 'Bitcoin (Lightning only)'] as const;
+
+const paymentNotes = [
+  'A 30% upfront payment may be required, especially for new clients or people I have not worked with before.',
+  'PayPal payments have an additional 7.5% fee. Transaction, network, and conversion fees are paid by the client.',
+  'For Robux paid through a gamepass, the quote excludes Roblox’s 30% fee—I must receive the full agreed amount after that fee.',
+  'For group payouts, add me to the group as early as possible because Roblox requires a minimum membership period before a payout can be made.',
+  'Robux and cryptocurrency totals use the conversion rate agreed at the time of payment. Payment is complete once the full agreed amount is received.',
+  'Revenue share is accepted very rarely and only considered for established projects or reputable groups with a proven track record.',
+] as const;
+
+const briefItems = [
+  'What the project is and what system or features you need',
+  'References or examples that communicate the intended result',
+  'Your expected deadline and budget, when known',
+  'Whether the project already has an existing codebase',
+] as const;
+---
+
+<BaseLayout
+  title="Services and Pricing"
+  description="Roblox gameplay programming services, estimated commission pricing, payment options, and contact details."
+>
+  <div class="mx-auto w-full max-w-content px-page py-section">
+    <PageHeader
+      eyebrow="Commissions"
+      title="Services and pricing"
+      description="Focused Roblox development for gameplay, combat, abilities, and supporting systems. Every commission is scoped around the work your project actually needs."
+    />
+
+    <aside
+      class="mt-10 grid overflow-hidden rounded-md border border-border-subtle bg-border-subtle sm:grid-cols-[minmax(0,0.7fr)_minmax(0,1.3fr)]"
+      aria-label="Commission minimum"
+    >
+      <div class="bg-surface p-6 sm:p-8">
+        <p class="text-xs font-bold uppercase tracking-[0.2em] text-accent">Minimum commission</p>
+        <p class="mt-3 text-4xl font-semibold tracking-tight text-text-primary">$20</p>
+      </div>
+      <div class="border-t border-border-subtle bg-surface p-6 sm:border-l sm:border-t-0 sm:p-8">
+        <p class="max-w-2xl text-base leading-7 text-text-muted">
+          Prices can vary significantly with scope, complexity, the existing codebase, polish,
+          integrations, and deadline. The ranges below are estimates—not fixed packages.
+        </p>
+      </div>
+    </aside>
+
+    <section class="mt-section" aria-labelledby="services-heading">
+      <SectionHeader
+        eyebrow="What I build"
+        title="Development services"
+        titleId="services-heading"
+        description="Choose the closest starting point. The final quote defines the exact deliverables, boundaries, and integration work."
+      />
+
+      <div class="mt-10 border-t border-border-subtle">
+        {
+          services.map((service) => (
+            <article class="grid gap-8 border-b border-border-subtle py-10 lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)] lg:gap-14 lg:py-14">
+              <div>
+                <p class="text-xs font-bold tracking-[0.2em] text-accent">{service.number}</p>
+                <h3 class="mt-3 text-2xl font-semibold tracking-tight text-text-primary sm:text-3xl">
+                  {service.title}
+                </h3>
+                <p class="mt-4 max-w-xl text-base leading-7 text-text-muted">{service.description}</p>
+
+                <div class="mt-6 flex flex-wrap gap-x-5 gap-y-2">
+                  {service.links.map((link) => (
+                    <a
+                      href={link.href}
+                      class="text-sm font-semibold text-text-primary underline decoration-border underline-offset-4 transition-colors hover:text-accent focus-visible:text-accent"
+                    >
+                      {link.label}
+                    </a>
+                  ))}
+                </div>
+              </div>
+
+              <div class="grid gap-7 sm:grid-cols-2">
+                <div class="sm:col-span-2">
+                  <h4 class="text-sm font-bold uppercase tracking-[0.14em] text-text-primary">Can include</h4>
+                  <ul class="mt-4 grid gap-3 text-sm leading-6 text-text-muted sm:grid-cols-2">
+                    {service.includes.map((item) => (
+                      <li class="flex gap-3">
+                        <span class="mt-[0.6rem] h-1.5 w-1.5 shrink-0 rounded-full bg-accent" aria-hidden="true" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div>
+                  <h4 class="text-sm font-bold uppercase tracking-[0.14em] text-text-primary">Good fit</h4>
+                  <p class="mt-3 text-sm leading-6 text-text-muted">{service.fit}</p>
+                </div>
+
+                <div>
+                  <h4 class="text-sm font-bold uppercase tracking-[0.14em] text-text-primary">For a quote</h4>
+                  <p class="mt-3 text-sm leading-6 text-text-muted">{service.inputs}</p>
+                </div>
+
+                <div>
+                  <h4 class="text-sm font-bold uppercase tracking-[0.14em] text-text-primary">Not included by default</h4>
+                  <p class="mt-3 text-sm leading-6 text-text-muted">{service.exclusions}</p>
+                </div>
+
+                <div>
+                  <h4 class="text-sm font-bold uppercase tracking-[0.14em] text-text-primary">Pricing</h4>
+                  <p class="mt-3 text-sm leading-6 text-text-muted">{service.pricing}</p>
+                </div>
+
+                <div class="sm:col-span-2">
+                  <ButtonLink href={inquiryUrl} variant="text">Request a quote</ButtonLink>
+                </div>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="mt-section" aria-labelledby="pricing-heading">
+      <SectionHeader
+        eyebrow="Estimates"
+        title="Pricing by scope"
+        titleId="pricing-heading"
+        description="Use these ranges to set an initial budget. Larger or custom commissions receive a custom quote after the requirements are clear."
+      />
+
+      <div class="mt-10 divide-y divide-border-subtle border-y border-border-subtle">
+        {
+          priceRanges.map((price, index) => (
+            <article class="grid gap-4 py-7 sm:grid-cols-[3rem_minmax(9rem,0.55fr)_minmax(0,1.45fr)] sm:items-start sm:gap-6 sm:py-8">
+              <p class="text-xs font-bold tracking-[0.2em] text-accent">0{index + 1}</p>
+              <div>
+                <p class="text-2xl font-semibold tracking-tight text-text-primary">{price.range}</p>
+                <h3 class="mt-1 text-sm font-bold uppercase tracking-[0.12em] text-text-muted">{price.label}</h3>
+              </div>
+              <p class="max-w-3xl text-base leading-7 text-text-muted">{price.description}</p>
+            </article>
+          ))
+        }
+      </div>
+
+      <p class="mt-6 max-w-3xl text-sm leading-6 text-text-muted">
+        These are estimates rather than a menu of packages. Scope, complexity, code quality,
+        polish, integrations, and schedule determine the final price agreed before work begins.
+      </p>
+    </section>
+
+    <section class="mt-section" aria-labelledby="payments-heading">
+      <div class="grid gap-10 lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)] lg:gap-14">
+        <div>
+          <SectionHeader
+            eyebrow="Payment"
+            title="Flexible ways to pay"
+            titleId="payments-heading"
+            description="Only send payment to an account, username, or wallet address provided directly by me."
+          />
+
+          <ul class="mt-7 flex list-none flex-wrap gap-2 p-0" aria-label="Accepted payment methods">
+            {
+              paymentMethods.map((method) => (
+                <li class="rounded-full border border-border bg-surface-raised px-3.5 py-2 text-sm font-semibold text-text-primary">
+                  {method}
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+
+        <ul class="divide-y divide-border-subtle border-y border-border-subtle">
+          {
+            paymentNotes.map((note) => (
+              <li class="flex gap-4 py-5 text-sm leading-6 text-text-muted">
+                <span class="mt-[0.55rem] h-1.5 w-1.5 shrink-0 rounded-full bg-accent" aria-hidden="true" />
+                <span>{note}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+
+    <section class="mt-section" aria-labelledby="brief-heading">
+      <SectionHeader
+        eyebrow="Start a conversation"
+        title="Send a useful commission brief"
+        titleId="brief-heading"
+        description="Lead with the work itself so I can understand the request and respond with the right questions. Messages with little or no context may not receive a response."
+      />
+
+      <div class="mt-8 grid gap-3 sm:grid-cols-2">
+        {
+          briefItems.map((item, index) => (
+            <div class="flex gap-3 rounded-md border border-border-subtle bg-surface/50 p-4 text-sm leading-6 text-text-muted">
+              <span class="font-bold text-accent">0{index + 1}</span>
+              <span>{item}</span>
+            </div>
+          ))
+        }
+      </div>
+
+      <CallToAction
+        class="mt-8"
+        title="Ready to discuss the work?"
+        description={`Email ${site.contact.email} or message ${site.contact.discord} on Discord with the details above.`}
+      >
+        <Fragment slot="actions">
+          <ButtonLink href={inquiryUrl}>Email a commission brief</ButtonLink>
+        </Fragment>
+      </CallToAction>
+    </section>
+  </div>
+</BaseLayout>

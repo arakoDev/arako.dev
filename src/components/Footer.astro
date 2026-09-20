@@ -2,10 +2,33 @@
 import { site } from '../config/site';
 
 const currentYear = new Date().getFullYear();
+const footerNavigation = site.navigation.filter(({ href }) => href !== '/');
 ---
 
 <footer class="border-t border-border-subtle">
-	<div class="mx-auto max-w-content px-page py-6">
-		<p class="m-0 text-sm text-text-muted">&copy; {currentYear} {site.name}</p>
+	<div
+		class="mx-auto flex max-w-content flex-col gap-5 px-page py-6 sm:flex-row sm:items-center sm:justify-between"
+	>
+		<div>
+			<p class="m-0 font-semibold text-text-primary">{site.name}</p>
+			<p class="mt-1 text-sm text-text-muted">Roblox gameplay and systems development.</p>
+		</div>
+
+		<div class="flex flex-col gap-3 sm:items-end">
+			<nav aria-label="Footer navigation">
+				<ul class="m-0 flex flex-wrap gap-x-5 gap-y-2 p-0 text-sm">
+					{
+						footerNavigation.map((item) => (
+							<li class="list-none">
+								<a class="text-text-muted no-underline hover:text-accent" href={item.href}>
+									{item.label}
+								</a>
+							</li>
+						))
+					}
+				</ul>
+			</nav>
+			<p class="m-0 text-sm text-text-muted">&copy; {currentYear} {site.name}</p>
+		</div>
 	</div>
 </footer>

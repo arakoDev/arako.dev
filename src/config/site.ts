@@ -39,13 +39,18 @@ export const site = {
 	navigation: [
 		{ label: 'Home', href: '/' },
 		{ label: 'Work', href: '/work' },
+		{ label: 'Services', href: '/services' },
 	],
 	contact: {
-		email: null,
-		discord: null,
-		inquiryUrl: null,
+		email: 'contact@arako.dev',
+		discord: 'arakodev',
+		inquiryUrl: 'mailto:contact@arako.dev?subject=Commission%20inquiry',
 	},
-	socialLinks: [],
+	socialLinks: [
+		{ label: 'X', href: 'https://x.com/arakoDev' },
+		{ label: 'Roblox', href: 'https://www.roblox.com/users/2324084048/profile' },
+		{ label: 'GitHub', href: 'https://github.com/arakoDev' },
+	],
 	availability: {
 		status: null,
 		message: null,
