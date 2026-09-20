@@ -8,9 +8,10 @@ interface Props {
 	project: CollectionEntry<'projects'>;
 	headingLevel?: 2 | 3;
 	priority?: boolean;
+	revealDelay?: number;
 }
 
-const { project, headingLevel = 2, priority = false } = Astro.props;
+const { project, headingLevel = 2, priority = false, revealDelay } = Astro.props;
 const { categories, heroAlt, heroImage, summary, title } = project.data;
 const categoryLabel = categories.map((category) => projectCategoryLabels[category]).join(' · ');
 const Heading = `h${headingLevel}` as 'h2' | 'h3';
@@ -19,15 +20,15 @@ const responsiveWidths = [
 ];
 ---
 
-<article class="h-full">
+<article class="h-full" data-reveal="scale" data-reveal-delay={revealDelay}>
 	<a
-		class="group flex h-full flex-col overflow-hidden rounded-md border border-border bg-surface no-underline transition-colors hover:border-accent"
+		class="motion-card group flex h-full flex-col overflow-hidden rounded-md border border-border bg-surface no-underline hover:border-accent"
 		href={`/work/${project.id}`}
 		aria-label={`View project: ${title}`}
 	>
 		<div class="aspect-video overflow-hidden border-b border-border bg-background">
 			<Image
-				class="h-full w-full object-cover transition-opacity group-hover:opacity-90"
+				class="motion-card-media h-full w-full object-cover group-hover:opacity-90"
 				src={heroImage}
 				alt={heroAlt}
 				widths={responsiveWidths}
@@ -55,7 +56,7 @@ const responsiveWidths = [
 				class="mt-auto pt-5 text-sm font-medium text-text-primary transition-colors group-hover:text-accent"
 				aria-hidden="true"
 			>
-				View project &rarr;
+				View project <span class="motion-arrow">&rarr;</span>
 			</p>
 		</div>
 	</a>

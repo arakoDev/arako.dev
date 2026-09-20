@@ -20,7 +20,7 @@ const links = [
 ];
 ---
 
-<nav class:list={['border-t border-border-subtle pt-10', className]} aria-label="More project pages">
+<nav class:list={['border-t border-border-subtle pt-10', className]} aria-label="More project pages" data-reveal="scale">
 	<ul
 		class:list={[
 			'grid gap-px overflow-hidden rounded-md border border-border-subtle bg-border-subtle',
@@ -32,7 +32,7 @@ const links = [
 			links.map((link) => (
 				<li class="bg-surface">
 					<a
-						class="group flex min-h-32 flex-col justify-between p-5 text-text-primary no-underline transition-colors hover:bg-surface-raised"
+						class="motion-row group flex min-h-32 flex-col justify-between p-5 text-text-primary no-underline hover:bg-surface-raised"
 						href={link.href}
 					>
 						<span class="text-label font-semibold uppercase tracking-label text-text-muted">
@@ -40,7 +40,7 @@ const links = [
 						</span>
 						<span class="mt-5 flex items-end justify-between gap-4 font-semibold">
 							{link.title}
-							<span class="text-accent transition-transform group-hover:translate-x-1" aria-hidden="true">
+							<span class="motion-arrow text-accent" aria-hidden="true">
 								→
 							</span>
 						</span>

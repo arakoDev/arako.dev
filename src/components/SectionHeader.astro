@@ -6,6 +6,7 @@ interface Props {
 	titleId?: string;
 	headingLevel?: 2 | 3;
 	class?: string;
+	revealDelay?: number;
 }
 
 const {
@@ -15,11 +16,12 @@ const {
 	titleId,
 	headingLevel = 2,
 	class: className,
+	revealDelay,
 } = Astro.props;
 const Heading = `h${headingLevel}` as 'h2' | 'h3';
 ---
 
-<header class:list={['max-w-reading', className]}>
+<header class:list={['max-w-reading', className]} data-reveal="heading" data-reveal-delay={revealDelay}>
 	{eyebrow && <p class="m-0 text-label font-semibold uppercase tracking-label text-accent">{eyebrow}</p>}
 	<Heading
 		id={titleId}

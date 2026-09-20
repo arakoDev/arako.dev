@@ -1,6 +1,7 @@
 ---
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
+import MotionController from '../components/MotionController.astro';
 import { site } from '../config/site';
 import '../styles/global.css';
 
@@ -28,6 +29,11 @@ const documentTitle = title === site.name ? title : `${title} | ${site.name}`;
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="alternate icon" href="/favicon.ico" />
 		<title>{documentTitle}</title>
+		<script is:inline>
+			if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+				document.documentElement.classList.add('motion-capable');
+			}
+		</script>
 	</head>
 	<body class="flex min-h-screen flex-col">
 		<a
@@ -42,5 +48,6 @@ const documentTitle = title === site.name ? title : `${title} | ${site.name}`;
 			<slot />
 		</main>
 		<Footer />
+		<MotionController />
 	</body>
 </html>

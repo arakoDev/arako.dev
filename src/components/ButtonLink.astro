@@ -30,8 +30,9 @@ const variants: Record<Variant, string> = {
 	{href}
 	{target}
 	{rel}
+	data-motion-variant={variant}
 	class:list={[
-		'inline-flex min-h-11 items-center justify-center rounded-md border py-2.5 text-sm font-semibold no-underline transition-colors',
+		'motion-button inline-flex min-h-11 items-center justify-center rounded-md border py-2.5 text-sm font-semibold no-underline',
 		variants[variant],
 		className,
 	]}

@@ -19,7 +19,7 @@ const isInline = variant === 'inline';
 >
 	<div
 		class:list={[
-			'inline-flex min-h-11 items-center gap-2.5 text-sm text-text-primary',
+			'inline-flex min-h-11 items-center gap-2.5 text-sm text-text-primary transition-colors',
 			!isInline && 'rounded-md border border-accent bg-surface px-4 py-2.5',
 		]}
 		title="Discord username"
@@ -30,9 +30,10 @@ const isInline = variant === 'inline';
 
 	<a
 		class:list={[
-			'inline-flex min-h-11 items-center gap-2.5 text-sm text-text-primary no-underline transition-colors hover:text-accent',
+			'motion-button inline-flex min-h-11 items-center gap-2.5 text-sm text-text-primary no-underline hover:text-accent',
 			!isInline && 'rounded-md border border-border bg-surface px-4 py-2.5 hover:border-accent',
 		]}
+		data-motion-variant={isInline ? 'text' : 'secondary'}
 		href={`mailto:${site.contact.email}`}
 	>
 		<img class="h-4 w-4 shrink-0 brightness-0 invert" src={emailIcon.src} alt="" width="16" height="16" />

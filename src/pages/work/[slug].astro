@@ -73,13 +73,16 @@ const contactNavigation = { href: '/commissions', title: 'Commission info' };
 >
 	<article>
 		<div class="max-w-4xl">
-			<ButtonLink href="/work" variant="text">&larr; Back to work</ButtonLink>
+			<div data-reveal="left">
+				<ButtonLink href="/work" variant="text">&larr; Back to work</ButtonLink>
+			</div>
 
 			<PageHeader
 				class="mt-8"
 				eyebrow={categoryLabel}
 				{title}
 				description={summary}
+				revealDelay={1}
 			/>
 		</div>
 
@@ -95,7 +98,7 @@ const contactNavigation = { href: '/commissions', title: 'Commission info' };
 		{
 			hasBodyContent && (
 				<div class="mt-12 border-t border-border-subtle pt-10">
-					<div class="prose-portfolio max-w-reading">
+					<div class="prose-portfolio max-w-reading" data-reveal-children>
 						<Content />
 					</div>
 				</div>
@@ -109,14 +112,14 @@ const contactNavigation = { href: '/commissions', title: 'Commission info' };
 					aria-labelledby="project-outcome-title"
 				>
 					<SectionHeader title="Outcome" titleId="project-outcome-title" />
-					<p class="mt-5 leading-7 text-text-muted">{outcome}</p>
+					<p class="mt-5 leading-7 text-text-muted" data-reveal data-reveal-delay="1">{outcome}</p>
 				</section>
 			)
 		}
 
 		{
 			confidentiality && (
-				<aside class="mt-10 max-w-reading border-l-2 border-brass bg-surface px-5 py-4">
+				<aside class="mt-10 max-w-reading border-l-2 border-brass bg-surface px-5 py-4" data-reveal="scale">
 					<p class="text-label font-semibold uppercase tracking-label text-text-primary">
 						Confidentiality note
 					</p>
@@ -135,7 +138,7 @@ const contactNavigation = { href: '/commissions', title: 'Commission info' };
 				>
 					<div class="max-w-reading">
 						<SectionHeader title="Project links" titleId="project-links-title" />
-						<div class="mt-5 flex flex-wrap gap-3">
+						<div class="mt-5 flex flex-wrap gap-3" data-reveal data-reveal-delay="1">
 							{projectLinks.map((link) => (
 								<ButtonLink
 									class="gap-2"

@@ -1,0 +1,63 @@
+<script>
+	const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
+	let revealObserver: IntersectionObserver | undefined;
+
+	function revealEverything() {
+		revealObserver?.disconnect();
+		revealObserver = undefined;
+		document.documentElement.classList.remove('motion-capable');
+		document
+			.querySelectorAll<HTMLElement>('[data-reveal], [data-reveal-children] > *')
+			.forEach((element) => element.classList.add('is-revealed'));
+	}
+
+	function setupMotion() {
+		if (motionPreference.matches) {
+			revealEverything();
+			return;
+		}
+
+		document.documentElement.classList.add('motion-capable');
+		const revealElements = Array.from(
+			document.querySelectorAll<HTMLElement>('[data-reveal], [data-reveal-children] > *'),
+		);
+
+		revealElements.forEach((element) => {
+			if (!element.hasAttribute('data-reveal')) {
+				const siblingIndex = Array.from(element.parentElement?.children ?? []).indexOf(element);
+				element.style.setProperty('--reveal-delay', `${Math.min(siblingIndex, 3) * 45}ms`);
+			}
+
+			const delayStep = Number(element.dataset.revealDelay);
+			if (Number.isFinite(delayStep) && delayStep > 0) {
+				element.style.setProperty('--reveal-delay', `${Math.min(delayStep, 6) * 55}ms`);
+			}
+		});
+
+		if (!('IntersectionObserver' in window)) {
+			revealElements.forEach((element) => element.classList.add('is-revealed'));
+			return;
+		}
+
+		revealObserver?.disconnect();
+		revealObserver = new IntersectionObserver(
+			(entries, observer) => {
+				entries.forEach((entry) => {
+					if (!entry.isIntersecting) return;
+
+					entry.target.classList.add('is-revealed');
+					observer.unobserve(entry.target);
+				});
+			},
+			{ rootMargin: '0px 0px -7% 0px', threshold: 0.08 },
+		);
+
+		revealElements.forEach((element) => {
+			if (!element.classList.contains('is-revealed')) revealObserver?.observe(element);
+		});
+	}
+
+	motionPreference.addEventListener('change', setupMotion);
+	document.addEventListener('astro:page-load', setupMotion);
+	setupMotion();
+</script>

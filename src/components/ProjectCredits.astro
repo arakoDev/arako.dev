@@ -17,13 +17,13 @@ const { credits, class: className } = Astro.props;
 
 <section class:list={['border-t border-border-subtle pt-10', className]} aria-labelledby="project-credits-title">
 	<SectionHeader title="Credits" titleId="project-credits-title" />
-	<ul class="mt-5 grid gap-x-8 gap-y-4 sm:grid-cols-2">
+	<ul class="mt-5 grid gap-x-8 gap-y-4 sm:grid-cols-2" data-reveal-children>
 		{
 			credits.map((credit) => (
 				<li>
 					{credit.url ? (
 						<a
-							class="font-semibold text-text-primary"
+							class="motion-text-link font-semibold text-text-primary"
 							href={credit.url}
 							target="_blank"
 							rel="noopener noreferrer"

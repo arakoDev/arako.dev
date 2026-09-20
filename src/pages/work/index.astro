@@ -83,6 +83,7 @@ const projectCountLabel = `${projects.length} ${projects.length === 1 ? 'project
 			<section
 				class="mt-10 max-w-reading rounded-md border border-border-subtle bg-surface px-5 py-8 sm:px-8"
 				aria-labelledby="empty-archive-title"
+				data-reveal="scale"
 			>
 				<p class="text-label font-semibold uppercase tracking-label text-accent">Archive status</p>
 				<h2 id="empty-archive-title" class="mt-3 text-section-title text-text-primary">
@@ -97,14 +98,14 @@ const projectCountLabel = `${projects.length} ${projects.length === 1 ? 'project
 			</section>
 		) : (
 			<div data-work-archive>
-				<div class="mt-10 flex flex-col gap-5 border-y border-border-subtle py-5 sm:flex-row sm:items-end sm:justify-between">
+				<div class="mt-10 flex flex-col gap-5 border-y border-border-subtle py-5 sm:flex-row sm:items-end sm:justify-between" data-reveal="left">
 					{showFilters && (
 						<nav aria-label="Filter projects by category">
 							<ul class="flex flex-wrap gap-2">
 								{filters.map((filter, index) => (
 									<li>
-										<a
-											class="inline-flex min-h-11 items-center gap-2 rounded-md border border-border bg-surface px-4 py-2 text-sm font-medium text-text-muted no-underline transition-colors hover:border-accent hover:text-text-primary aria-[current=page]:border-accent aria-[current=page]:bg-accent aria-[current=page]:text-background"
+									<a
+										class="motion-nav inline-flex min-h-11 items-center gap-2 rounded-md border border-border bg-surface px-4 py-2 text-sm font-medium text-text-muted no-underline hover:border-accent hover:text-text-primary aria-[current=page]:border-accent aria-[current=page]:bg-accent aria-[current=page]:text-background"
 											href={filter.id === 'all' ? '/work' : `/work?category=${filter.id}`}
 											aria-current={index === 0 ? 'page' : undefined}
 											aria-controls="project-sections"
@@ -162,6 +163,7 @@ const projectCountLabel = `${projects.length} ${projects.length === 1 ? 'project
 											{project}
 											headingLevel={3}
 											priority={sectionIndex === 0 && projectIndex === 0}
+											revealDelay={projectIndex % 2}
 										/>
 									</li>
 								))}

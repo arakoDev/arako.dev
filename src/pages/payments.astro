@@ -35,8 +35,8 @@ const paymentIcons = {
 	<div class="mt-section-tight grid gap-12 lg:grid-cols-[minmax(14rem,0.55fr)_minmax(0,1.45fr)] lg:gap-16">
 		<section aria-labelledby="methods-heading">
 			<div class="lg:sticky lg:top-8">
-				<h2 id="methods-heading" class="text-section-title font-semibold text-text-primary">Accepted methods</h2>
-				<ul class="mt-6 divide-y divide-border-subtle border-y border-border-subtle">
+				<h2 id="methods-heading" class="text-section-title font-semibold text-text-primary" data-reveal="left">Accepted methods</h2>
+				<ul class="mt-6 divide-y divide-border-subtle border-y border-border-subtle" data-reveal-children>
 					{paymentMethods.map((method) => (
 						<li class="flex items-center gap-3 py-3 text-sm font-semibold text-text-primary">
 							<span
@@ -59,8 +59,8 @@ const paymentIcons = {
 		</section>
 
 		<section aria-labelledby="rules-heading">
-			<h2 id="rules-heading" class="text-section-title font-semibold text-text-primary">Payment rules</h2>
-			<ol class="mt-6 divide-y divide-border-subtle border-y border-border-subtle">
+			<h2 id="rules-heading" class="text-section-title font-semibold text-text-primary" data-reveal="heading">Payment rules</h2>
+			<ol class="mt-6 divide-y divide-border-subtle border-y border-border-subtle" data-reveal-children>
 				{
 					paymentRules.map((rule, index) => (
 						<li class="grid grid-cols-[2.5rem_1fr] gap-4 py-5 text-sm leading-6 text-text-muted sm:grid-cols-[3.5rem_1fr] sm:text-base sm:leading-7">
@@ -73,8 +73,8 @@ const paymentIcons = {
 		</section>
 	</div>
 
-	<nav class="mt-section-tight flex flex-wrap gap-x-6 gap-y-3 border-t border-border-subtle pt-6 text-sm" aria-label="Related commission information">
-		<a class="font-semibold" href="/pricing">← Pricing</a>
-		<a class="font-semibold" href="/terms">Commission terms →</a>
+	<nav class="mt-section-tight flex flex-wrap gap-x-6 gap-y-3 border-t border-border-subtle pt-6 text-sm" aria-label="Related commission information" data-reveal="left">
+		<a class="motion-text-link font-semibold" href="/pricing">← Pricing</a>
+		<a class="motion-text-link font-semibold" href="/terms">Commission terms →</a>
 	</nav>
 </BaseLayout>

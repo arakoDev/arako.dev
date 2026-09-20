@@ -45,25 +45,27 @@ const directoryLinks = [
 				width="224"
 				height="224"
 				fetchpriority="high"
+				data-reveal="portrait"
 			/>
 
 			<div class="max-w-3xl">
-				<div class="mb-4 flex flex-wrap items-center gap-x-4 gap-y-2">
+				<div class="mb-4 flex flex-wrap items-center gap-x-4 gap-y-2" data-reveal="left">
 					<p class="text-label font-semibold uppercase tracking-label text-accent">
 						Roblox Scripter
 					</p>
 					<p class="flex items-center gap-2 text-sm font-medium text-text-muted">
-						<span class="h-2 w-2 rounded-full bg-emerald-400" aria-hidden="true"></span>
+						<span class="status-dot h-2 w-2 rounded-full bg-emerald-400" aria-hidden="true"></span>
 						{site.availability.message}
 					</p>
 				</div>
-				<h1 id="hero-title" class="m-0 text-display font-semibold text-text-primary">Arako</h1>
-				<p class="mt-6 max-w-reading text-lede text-text-muted">
-					I have over 5 years of coding experience and 2 years of Roblox development
-					experience. I build combat, movement, abilities, round systems, and game prototypes.
+				<h1 id="hero-title" class="m-0 text-display font-semibold text-text-primary" data-reveal="heading" data-reveal-delay="1">Arako</h1>
+				<p class="mt-6 max-w-reading text-lede text-text-muted" data-reveal data-reveal-delay="2">
+					Roblox scripter with over 5 years of coding experience and 2 years working with
+					Roblox. I focus on building reliable, well-structured systems that are easy to
+					maintain and expand as a project grows.
 				</p>
 
-				<div class="mt-8 flex flex-wrap gap-3">
+				<div class="mt-8 flex flex-wrap gap-3" data-reveal data-reveal-delay="3">
 					<ButtonLink href="/work">View work</ButtonLink>
 					<ButtonLink href="/commissions" variant="secondary">Commission info</ButtonLink>
 				</div>
@@ -71,6 +73,8 @@ const directoryLinks = [
 				<aside
 					class="mt-10 flex flex-col gap-4 rounded-md border border-brass/60 bg-surface px-5 py-4 sm:flex-row sm:items-center sm:justify-between"
 					aria-label="Before contacting me"
+					data-reveal="scale"
+					data-reveal-delay="4"
 				>
 					<p class="text-sm leading-6 text-text-muted">
 						Before contacting me, please read the <strong class="font-semibold text-text-primary">Terms</strong>.
@@ -78,7 +82,7 @@ const directoryLinks = [
 					<ButtonLink class="shrink-0" href="/terms" variant="secondary">Read terms</ButtonLink>
 				</aside>
 
-				<div class="mt-5 grid gap-1 border-t border-border-subtle pt-5">
+				<div class="mt-5 grid gap-1 border-t border-border-subtle pt-5" data-reveal data-reveal-delay="5">
 					<div class="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-5">
 						<span class="w-20 shrink-0 text-xs font-semibold uppercase tracking-label text-text-muted">Contact</span>
 						<ContactShortcuts variant="inline" />
@@ -101,13 +105,13 @@ const directoryLinks = [
 						title="Projects"
 						titleId="selected-work-heading"
 					/>
-					<a class="shrink-0 text-sm font-semibold no-underline" href="/work">View all {projects.length} projects →</a>
+					<a class="motion-text-link shrink-0 text-sm font-semibold no-underline" href="/work" data-reveal data-reveal-delay="1">View all {projects.length} projects →</a>
 				</div>
 
 				<ul class="mt-8 grid list-none gap-6 p-0 md:grid-cols-2 lg:grid-cols-3">
 					{selectedProjects.map((project, index) => (
 						<li>
-							<ProjectCard project={project} headingLevel={3} priority={index === 0} />
+							<ProjectCard project={project} headingLevel={3} priority={index === 0} revealDelay={index} />
 						</li>
 					))}
 				</ul>
@@ -117,23 +121,23 @@ const directoryLinks = [
 
 	<section class="mx-auto max-w-content px-page pb-section" aria-labelledby="directory-heading">
 		<div class="grid gap-10 lg:grid-cols-[minmax(12rem,0.55fr)_minmax(0,1.45fr)] lg:gap-16">
-			<div>
+			<div data-reveal="left">
 				<p class="text-label font-semibold uppercase tracking-label text-accent">Site index</p>
 				<h2 id="directory-heading" class="mt-2 text-section-title font-semibold text-text-primary">Explore</h2>
 			</div>
 
-			<nav class="border-t border-border-subtle" aria-label="Explore this site">
+			<nav class="border-t border-border-subtle" aria-label="Explore this site" data-reveal data-reveal-delay="1">
 				<ul class="m-0 list-none p-0">
 					{
 						directoryLinks.map((link) => (
 							<li class="border-b border-border-subtle">
 								<a
-									class="group grid gap-2 py-6 text-text-primary no-underline sm:grid-cols-[9rem_1fr_auto] sm:items-center sm:gap-6"
+									class="motion-row group grid gap-2 py-6 text-text-primary no-underline sm:grid-cols-[9rem_1fr_auto] sm:items-center sm:gap-6"
 									href={link.href}
 								>
 									<span class="font-semibold transition-colors group-hover:text-accent">{link.label}</span>
 									<span class="text-sm leading-6 text-text-muted">{link.description}</span>
-									<span class="text-accent transition-transform group-hover:translate-x-1" aria-hidden="true">→</span>
+									<span class="motion-arrow text-accent" aria-hidden="true">→</span>
 								</a>
 							</li>
 						))

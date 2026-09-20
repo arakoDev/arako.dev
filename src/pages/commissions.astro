@@ -41,12 +41,14 @@ const informationPages = [
 
 	<div class="mt-section-tight grid gap-12 lg:grid-cols-[minmax(0,1.2fr)_minmax(18rem,0.8fr)] lg:gap-16">
 		<section aria-labelledby="brief-heading">
-			<p class="text-label font-semibold uppercase tracking-label text-accent">First message</p>
-			<h2 id="brief-heading" class="mt-2 text-section-title font-semibold text-text-primary">
-				Include these details
-			</h2>
+			<div data-reveal="left">
+				<p class="text-label font-semibold uppercase tracking-label text-accent">First message</p>
+				<h2 id="brief-heading" class="mt-2 text-section-title font-semibold text-text-primary">
+					Include these details
+				</h2>
+			</div>
 
-			<ol class="mt-8 divide-y divide-border-subtle border-y border-border-subtle">
+			<ol class="mt-8 divide-y divide-border-subtle border-y border-border-subtle" data-reveal-children>
 				{
 					commissionBriefItems.map((item, index) => (
 						<li class="grid grid-cols-[2.5rem_1fr] gap-4 py-5 text-base leading-7 text-text-muted">
@@ -57,16 +59,16 @@ const informationPages = [
 				}
 			</ol>
 
-			<p class="mt-6 text-sm leading-6 text-text-muted">
+			<p class="mt-6 text-sm leading-6 text-text-muted" data-reveal>
 				Messages with little or no context—such as <strong class="font-semibold text-text-primary">“hi,” “can you script?”</strong>
 				or <strong class="font-semibold text-text-primary">“are you available?”</strong>—may not receive a response.
 			</p>
 		</section>
 
-		<aside class="lg:border-l lg:border-border-subtle lg:pl-10" aria-labelledby="contact-heading">
+		<aside class="lg:border-l lg:border-border-subtle lg:pl-10" aria-labelledby="contact-heading" data-reveal="scale">
 			<p class="text-label font-semibold uppercase tracking-label text-accent">Availability</p>
 			<p class="mt-3 flex items-center gap-3 text-lg font-semibold text-text-primary">
-				<span class="h-2.5 w-2.5 rounded-full bg-emerald-400" aria-hidden="true"></span>
+				<span class="status-dot h-2.5 w-2.5 rounded-full bg-emerald-400" aria-hidden="true"></span>
 				{site.availability.message}
 			</p>
 
@@ -76,17 +78,17 @@ const informationPages = [
 	</div>
 
 	<nav class="mt-section border-t border-border-subtle" aria-label="Commission information pages">
-		<ul class="m-0 list-none p-0">
+		<ul class="m-0 list-none p-0" data-reveal-children>
 			{
 				informationPages.map((page) => (
 					<li class="border-b border-border-subtle">
 						<a
-							class="group grid gap-3 py-7 text-text-primary no-underline transition-colors hover:text-accent sm:grid-cols-[10rem_1fr_auto] sm:items-center sm:gap-8"
+							class="motion-row group grid gap-3 py-7 text-text-primary no-underline hover:text-accent sm:grid-cols-[10rem_1fr_auto] sm:items-center sm:gap-8"
 							href={page.href}
 						>
 							<span class="text-xl font-semibold">{page.label}</span>
 							<span class="max-w-2xl text-sm leading-6 text-text-muted">{page.description}</span>
-							<span class="text-xl text-accent transition-transform group-hover:translate-x-1" aria-hidden="true">→</span>
+							<span class="motion-arrow text-xl text-accent" aria-hidden="true">→</span>
 						</a>
 					</li>
 				))
