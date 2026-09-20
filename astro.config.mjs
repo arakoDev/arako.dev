@@ -2,11 +2,13 @@
 import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 
-// https://astro.build/config
 export default defineConfig({
+	site: 'https://arako.dev',
+
 	redirects: {
 		'/services': '/commissions',
 	},
+
 	vite: {
 		plugins: [tailwindcss()],
 	},
