@@ -1,12 +1,12 @@
 interface NavigationItem {
 	label: string;
 	href: string;
+	matchPaths?: readonly string[];
 }
 
 interface ContactConfig {
-	email: string | null;
 	discord: string | null;
-	inquiryUrl: string | null;
+	email: string | null;
 }
 
 interface SocialLink {
@@ -26,6 +26,7 @@ interface SiteConfig {
 	defaultDescription: string;
 	themeColor: string;
 	navigation: readonly NavigationItem[];
+	secondaryNavigation: readonly NavigationItem[];
 	contact: ContactConfig;
 	socialLinks: readonly SocialLink[];
 	availability: AvailabilityConfig;
@@ -34,26 +35,33 @@ interface SiteConfig {
 export const site = {
 	name: 'Arako',
 	language: 'en',
-	defaultDescription: "Arako's portfolio showcasing Roblox scripting and development experience.",
+	defaultDescription: 'Arako is a Roblox Scripter focused on combat, movement, abilities, and game systems.',
 	themeColor: '#080b12',
 	navigation: [
-		{ label: 'Home', href: '/' },
 		{ label: 'Work', href: '/work' },
-		{ label: 'Services', href: '/services' },
+		{
+			label: 'Commission info',
+			href: '/commissions',
+			matchPaths: ['/commissions', '/pricing', '/payments', '/terms'],
+		},
+	],
+	secondaryNavigation: [
+		{ label: 'Pricing', href: '/pricing' },
+		{ label: 'Payments', href: '/payments' },
+		{ label: 'Terms', href: '/terms' },
 	],
 	contact: {
-		email: 'contact@arako.dev',
 		discord: 'arakodev',
-		inquiryUrl: 'mailto:contact@arako.dev?subject=Commission%20inquiry',
+		email: 'contact@arako.dev',
 	},
 	socialLinks: [
+		{ label: 'GitHub', href: 'https://github.com/arakoDev' },
 		{ label: 'X', href: 'https://x.com/arakoDev' },
 		{ label: 'Roblox', href: 'https://www.roblox.com/users/2324084048/profile' },
-		{ label: 'GitHub', href: 'https://github.com/arakoDev' },
 	],
 	availability: {
-		status: null,
-		message: null,
+		status: 'open',
+		message: 'Available',
 		responseTime: null,
 	},
 } as const satisfies SiteConfig;

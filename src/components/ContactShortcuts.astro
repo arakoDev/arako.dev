@@ -1,0 +1,41 @@
+---
+import discordIcon from '../assets/icons/discord.svg';
+import emailIcon from '../assets/icons/email.svg';
+import { site } from '../config/site';
+
+interface Props {
+	class?: string;
+	variant?: 'buttons' | 'inline';
+}
+
+const { class: className, variant = 'buttons' } = Astro.props;
+const isInline = variant === 'inline';
+---
+
+<div
+	class:list={['flex flex-wrap', isInline ? 'gap-x-5 gap-y-2' : 'gap-3', className]}
+	role="group"
+	aria-label="Contact Arako"
+>
+	<div
+		class:list={[
+			'inline-flex min-h-11 items-center gap-2.5 text-sm text-text-primary',
+			!isInline && 'rounded-md border border-accent bg-surface px-4 py-2.5',
+		]}
+		title="Discord username"
+	>
+		<img class="h-4 w-4 shrink-0 brightness-0 invert" src={discordIcon.src} alt="" width="16" height="16" />
+		<span><span class="text-text-muted">Discord</span> <strong class="select-all font-semibold">{site.contact.discord}</strong></span>
+	</div>
+
+	<a
+		class:list={[
+			'inline-flex min-h-11 items-center gap-2.5 text-sm text-text-primary no-underline transition-colors hover:text-accent',
+			!isInline && 'rounded-md border border-border bg-surface px-4 py-2.5 hover:border-accent',
+		]}
+		href={`mailto:${site.contact.email}`}
+	>
+		<img class="h-4 w-4 shrink-0 brightness-0 invert" src={emailIcon.src} alt="" width="16" height="16" />
+		<span class="font-semibold">{site.contact.email}</span>
+	</a>
+</div>

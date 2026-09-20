@@ -1,16 +1,45 @@
 ---
+import { getCollection } from 'astro:content';
+
 import ButtonLink from '../components/ButtonLink.astro';
+import ContactShortcuts from '../components/ContactShortcuts.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import SectionHeader from '../components/SectionHeader.astro';
+import SocialLinks from '../components/SocialLinks.astro';
+import { site } from '../config/site';
 import BaseLayout from '../layouts/BaseLayout.astro';
+
+const projects = (await getCollection('projects', ({ data }) => !data.draft)).sort(
+	(a, b) =>
+		(a.data.featuredOrder ?? Number.POSITIVE_INFINITY) -
+			(b.data.featuredOrder ?? Number.POSITIVE_INFINITY) ||
+		a.data.title.localeCompare(b.data.title),
+);
+const selectedProjects = projects.slice(0, 3);
+const directoryLinks = [
+	{
+		label: 'Work archive',
+		href: '/work',
+		description: `${projects.length} published projects across combat, gameplay, skills, and prototypes.`,
+	},
+	{
+		label: 'Pricing',
+		href: '/pricing',
+		description: 'Estimate ranges from small features to complete frameworks.',
+	},
+	{
+		label: 'Terms',
+		href: '/terms',
+		description: 'Scope, cancellation, delivery, support, and usage rights.',
+	},
+] as const;
 ---
 
 <BaseLayout>
-	<section
-		class="mx-auto flex min-h-[calc(100svh-4rem)] max-w-content items-center px-page py-section"
-		aria-labelledby="hero-title"
-	>
-		<div class="flex w-full flex-col items-start gap-8 md:flex-row md:items-center md:gap-12 lg:gap-16">
+	<section class="mx-auto max-w-content px-page py-section" aria-labelledby="hero-title">
+		<div class="grid items-center gap-10 md:grid-cols-[auto_minmax(0,1fr)] md:gap-12 lg:gap-16">
 			<img
-				class="h-44 w-44 shrink-0 self-center rounded-full border border-accent/30 object-cover shadow-xl shadow-black/40 sm:h-52 sm:w-52 md:self-auto lg:h-56 lg:w-56"
+				class="h-40 w-40 rounded-full border border-accent/30 object-cover shadow-xl shadow-black/40 sm:h-48 sm:w-48 md:h-52 md:w-52 lg:h-56 lg:w-56"
 				src="/images/arako.jpg"
 				alt="Arako"
 				width="224"
@@ -19,23 +48,98 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 			/>
 
 			<div class="max-w-3xl">
-				<p class="mb-4 text-label font-semibold uppercase tracking-label text-accent">
-					Roblox Scripter
-				</p>
-				<h1 id="hero-title" class="m-0 text-display font-semibold text-text-primary">
-					Arako
-				</h1>
+				<div class="mb-4 flex flex-wrap items-center gap-x-4 gap-y-2">
+					<p class="text-label font-semibold uppercase tracking-label text-accent">
+						Roblox Scripter
+					</p>
+					<p class="flex items-center gap-2 text-sm font-medium text-text-muted">
+						<span class="h-2 w-2 rounded-full bg-emerald-400" aria-hidden="true"></span>
+						{site.availability.message}
+					</p>
+				</div>
+				<h1 id="hero-title" class="m-0 text-display font-semibold text-text-primary">Arako</h1>
 				<p class="mt-6 max-w-reading text-lede text-text-muted">
-					Roblox Scripter with over 5 years of coding experience and 2 years of experience
-					developing on Roblox. I focus on writing clean, organized, and optimized code,
-					ensuring scalability, maintainability, and consistent performance across projects.
+					I have over 5 years of coding experience and 2 years of Roblox development
+					experience. I build combat, movement, abilities, round systems, and game prototypes.
 				</p>
 
-				<div class="mt-8 flex flex-col gap-3 sm:flex-row">
-					<ButtonLink href="/work">View Work</ButtonLink>
-					<ButtonLink href="#contact" variant="secondary">Contact</ButtonLink>
+				<div class="mt-8 flex flex-wrap gap-3">
+					<ButtonLink href="/work">View work</ButtonLink>
+					<ButtonLink href="/commissions" variant="secondary">Commission info</ButtonLink>
+				</div>
+
+				<aside
+					class="mt-10 flex flex-col gap-4 rounded-md border border-brass/60 bg-surface px-5 py-4 sm:flex-row sm:items-center sm:justify-between"
+					aria-label="Before contacting me"
+				>
+					<p class="text-sm leading-6 text-text-muted">
+						Before contacting me, please read the <strong class="font-semibold text-text-primary">Terms</strong>.
+					</p>
+					<ButtonLink class="shrink-0" href="/terms" variant="secondary">Read terms</ButtonLink>
+				</aside>
+
+				<div class="mt-5 grid gap-1 border-t border-border-subtle pt-5">
+					<div class="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-5">
+						<span class="w-20 shrink-0 text-xs font-semibold uppercase tracking-label text-text-muted">Contact</span>
+						<ContactShortcuts variant="inline" />
+					</div>
+					<div class="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-5">
+						<span class="w-20 shrink-0 text-xs font-semibold uppercase tracking-label text-text-muted">Profiles</span>
+						<SocialLinks showLabels={true} variant="inline" />
+					</div>
 				</div>
 			</div>
+		</div>
+	</section>
+
+	{
+		selectedProjects.length > 0 && (
+			<section class="mx-auto max-w-content px-page py-section" aria-labelledby="selected-work-heading">
+				<div class="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+					<SectionHeader
+						eyebrow="Selected work"
+						title="Projects"
+						titleId="selected-work-heading"
+					/>
+					<a class="shrink-0 text-sm font-semibold no-underline" href="/work">View all {projects.length} projects →</a>
+				</div>
+
+				<ul class="mt-8 grid list-none gap-6 p-0 md:grid-cols-2 lg:grid-cols-3">
+					{selectedProjects.map((project, index) => (
+						<li>
+							<ProjectCard project={project} headingLevel={3} priority={index === 0} />
+						</li>
+					))}
+				</ul>
+			</section>
+		)
+	}
+
+	<section class="mx-auto max-w-content px-page pb-section" aria-labelledby="directory-heading">
+		<div class="grid gap-10 lg:grid-cols-[minmax(12rem,0.55fr)_minmax(0,1.45fr)] lg:gap-16">
+			<div>
+				<p class="text-label font-semibold uppercase tracking-label text-accent">Site index</p>
+				<h2 id="directory-heading" class="mt-2 text-section-title font-semibold text-text-primary">Explore</h2>
+			</div>
+
+			<nav class="border-t border-border-subtle" aria-label="Explore this site">
+				<ul class="m-0 list-none p-0">
+					{
+						directoryLinks.map((link) => (
+							<li class="border-b border-border-subtle">
+								<a
+									class="group grid gap-2 py-6 text-text-primary no-underline sm:grid-cols-[9rem_1fr_auto] sm:items-center sm:gap-6"
+									href={link.href}
+								>
+									<span class="font-semibold transition-colors group-hover:text-accent">{link.label}</span>
+									<span class="text-sm leading-6 text-text-muted">{link.description}</span>
+									<span class="text-accent transition-transform group-hover:translate-x-1" aria-hidden="true">→</span>
+								</a>
+							</li>
+						))
+					}
+				</ul>
+			</nav>
 		</div>
 	</section>
 </BaseLayout>

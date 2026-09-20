@@ -8,7 +8,6 @@ import ProjectCredits from '../../components/ProjectCredits.astro';
 import ProjectNavigation from '../../components/ProjectNavigation.astro';
 import SectionHeader from '../../components/SectionHeader.astro';
 import { projectCategoryLabels, projectLinkLabels } from '../../config/projects';
-import { site } from '../../config/site';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
 interface Props {
@@ -64,9 +63,7 @@ const projectLinks = links.map((link) => ({
 	label: link.label ?? projectLinkLabels[link.type],
 }));
 const categoryLabel = categories.map((category) => projectCategoryLabels[category]).join(' · ');
-const contactNavigation = site.contact.inquiryUrl
-	? { href: site.contact.inquiryUrl, title: 'Contact Arako' }
-	: undefined;
+const contactNavigation = { href: '/commissions', title: 'Commission info' };
 ---
 
 <BaseLayout

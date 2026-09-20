@@ -62,6 +62,7 @@
 		background-color: var(--color-background);
 		color-scheme: dark;
 		font-family: var(--font-sans);
+		scroll-behavior: smooth;
 		text-rendering: optimizeLegibility;
 		-webkit-font-smoothing: antialiased;
 		-moz-osx-font-smoothing: grayscale;

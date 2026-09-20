@@ -1,0 +1,53 @@
+---
+import githubIcon from '../assets/icons/github.svg';
+import robloxIcon from '../assets/icons/roblox.svg';
+import xIcon from '../assets/icons/x.svg';
+import { site } from '../config/site';
+
+interface Props {
+	class?: string;
+	showLabels?: boolean;
+	variant?: 'buttons' | 'inline';
+}
+
+const { class: className, showLabels = false, variant = 'buttons' } = Astro.props;
+const isInline = variant === 'inline';
+const icons = {
+	X: xIcon,
+	Roblox: robloxIcon,
+	GitHub: githubIcon,
+} as const;
+---
+
+<nav class={className} aria-label="External profiles">
+	<ul class="flex list-none flex-wrap gap-2 p-0">
+		{
+			site.socialLinks.map((link) => (
+				<li>
+					<a
+						class:list={[
+							'inline-flex min-h-11 items-center justify-center gap-2 text-white no-underline transition-colors hover:text-accent',
+							isInline
+								? 'px-1'
+								: 'min-w-11 rounded-md border border-border bg-surface px-3 hover:border-accent hover:bg-surface-raised',
+						]}
+						href={link.href}
+						target="_blank"
+						rel="noopener noreferrer"
+						aria-label={`${link.label} profile (opens in a new tab)`}
+						title={link.label}
+					>
+						<img
+							class="h-5 w-5 brightness-0 invert"
+							src={icons[link.label].src}
+							alt=""
+							width="20"
+							height="20"
+						/>
+						{showLabels && <span class="text-sm font-semibold">{link.label}</span>}
+					</a>
+				</li>
+			))
+		}
+	</ul>
+</nav>

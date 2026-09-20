@@ -6,6 +6,7 @@ function normalizePath(pathname: string) {
 }
 
 const currentPath = normalizePath(Astro.url.pathname);
+const isHome = currentPath === '/';
 
 function isCurrentPage(href: string) {
 	const hrefPath = normalizePath(new URL(href, Astro.url).pathname);
@@ -14,14 +15,22 @@ function isCurrentPage(href: string) {
 		? currentPath === hrefPath
 		: currentPath === hrefPath || currentPath.startsWith(`${hrefPath}/`);
 }
+
+function isCurrentNavigationItem(item: (typeof site.navigation)[number]) {
+	return (
+		isCurrentPage(item.href) ||
+		('matchPaths' in item && item.matchPaths.some((path) => isCurrentPage(path)))
+	);
+}
 ---
 
 <header class="border-b border-border-subtle bg-background">
-	<div class="mx-auto flex max-w-content items-center justify-between gap-3 px-page py-2.5">
+	<div class="mx-auto flex max-w-content items-center justify-between gap-1 px-page py-2.5 sm:gap-3">
 		<a
-			class="inline-flex min-h-11 min-w-11 shrink-0 items-center rounded-md px-2 text-base font-semibold tracking-tight text-text-primary no-underline transition-colors hover:text-accent"
+			class="inline-flex min-h-11 min-w-11 shrink-0 items-center rounded-md px-1 text-base font-semibold tracking-tight text-text-primary no-underline transition-colors hover:text-accent sm:px-2"
 			href="/"
 			aria-label={`${site.name} home`}
+			aria-current={isHome ? 'page' : undefined}
 		>
 			{site.name}
 		</a>
@@ -30,13 +39,13 @@ function isCurrentPage(href: string) {
 			<ul class="m-0 flex list-none items-center gap-1 p-0 sm:gap-2">
 				{
 					site.navigation.map((item) => {
-						const isCurrent = isCurrentPage(item.href);
+						const isCurrent = isCurrentNavigationItem(item);
 
 						return (
 							<li>
 								<a
 									class:list={[
-										'inline-flex min-h-11 items-center justify-center rounded-md border px-3 text-sm font-medium no-underline transition-colors',
+										'inline-flex min-h-11 items-center justify-center rounded-md border px-2 text-sm font-medium no-underline transition-colors sm:px-3',
 										isCurrent
 											? 'border-border bg-surface text-text-primary'
 											: 'border-transparent text-text-muted hover:border-border hover:bg-surface hover:text-text-primary',

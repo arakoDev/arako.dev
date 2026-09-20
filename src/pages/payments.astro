@@ -1,0 +1,80 @@
+---
+import bitcoinIcon from '../assets/icons/bitcoin.svg';
+import paypalIcon from '../assets/icons/paypal.svg';
+import robuxIcon from '../assets/icons/robux.svg';
+import usdtIcon from '../assets/icons/usdt.svg';
+import wiseIcon from '../assets/icons/wise.svg';
+import CommissionNavigation from '../components/CommissionNavigation.astro';
+import PageHeader from '../components/PageHeader.astro';
+import { paymentMethods, paymentRules } from '../config/commissions';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const paymentIcons = {
+	Wise: wiseIcon,
+	PayPal: paypalIcon,
+	Robux: robuxIcon,
+	USDT: usdtIcon,
+	'Bitcoin (Lightning only)': bitcoinIcon,
+} as const;
+---
+
+<BaseLayout
+	title="Payments"
+	description="Accepted commission payment methods, fees, deposits, and conversion rules."
+	mainClass="mx-auto w-full max-w-content px-page py-section"
+>
+	<PageHeader
+		title="Payments"
+		description="Accepted methods, additional fees, deposits, and rules for Robux and cryptocurrency payments."
+	/>
+
+	<div class="mt-10">
+		<CommissionNavigation />
+	</div>
+
+	<div class="mt-section-tight grid gap-12 lg:grid-cols-[minmax(14rem,0.55fr)_minmax(0,1.45fr)] lg:gap-16">
+		<section aria-labelledby="methods-heading">
+			<div class="lg:sticky lg:top-8">
+				<h2 id="methods-heading" class="text-section-title font-semibold text-text-primary">Accepted methods</h2>
+				<ul class="mt-6 divide-y divide-border-subtle border-y border-border-subtle">
+					{paymentMethods.map((method) => (
+						<li class="flex items-center gap-3 py-3 text-sm font-semibold text-text-primary">
+							<span
+								class="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-surface-raised"
+								aria-hidden="true"
+							>
+								<img
+									class="h-5 w-5 object-contain brightness-0 invert"
+									src={paymentIcons[method].src}
+									alt=""
+									width="20"
+									height="20"
+								/>
+							</span>
+							<span>{method}</span>
+						</li>
+					))}
+				</ul>
+			</div>
+		</section>
+
+		<section aria-labelledby="rules-heading">
+			<h2 id="rules-heading" class="text-section-title font-semibold text-text-primary">Payment rules</h2>
+			<ol class="mt-6 divide-y divide-border-subtle border-y border-border-subtle">
+				{
+					paymentRules.map((rule, index) => (
+						<li class="grid grid-cols-[2.5rem_1fr] gap-4 py-5 text-sm leading-6 text-text-muted sm:grid-cols-[3.5rem_1fr] sm:text-base sm:leading-7">
+							<span class="font-mono text-xs text-accent sm:text-sm">{String(index + 1).padStart(2, '0')}</span>
+							<span>{rule}</span>
+						</li>
+					))
+				}
+			</ol>
+		</section>
+	</div>
+
+	<nav class="mt-section-tight flex flex-wrap gap-x-6 gap-y-3 border-t border-border-subtle pt-6 text-sm" aria-label="Related commission information">
+		<a class="font-semibold" href="/pricing">← Pricing</a>
+		<a class="font-semibold" href="/terms">Commission terms →</a>
+	</nav>
+</BaseLayout>

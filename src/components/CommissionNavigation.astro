@@ -1,0 +1,37 @@
+---
+const items = [
+	{ label: 'Commission info', href: '/commissions' },
+	{ label: 'Pricing', href: '/pricing' },
+	{ label: 'Payments', href: '/payments' },
+	{ label: 'Terms', href: '/terms' },
+] as const;
+
+const currentPath = Astro.url.pathname.replace(/\/+$/, '') || '/';
+---
+
+<nav class="overflow-x-auto border-y border-border-subtle py-3" aria-label="Commission information">
+	<ul class="m-0 flex min-w-max list-none gap-1 p-0">
+		{
+			items.map((item) => {
+				const isCurrent = currentPath === item.href;
+
+				return (
+					<li>
+						<a
+							class:list={[
+								'inline-flex min-h-11 items-center rounded-md px-4 text-sm font-semibold no-underline transition-colors',
+								isCurrent
+									? 'bg-surface-raised text-text-primary'
+									: 'text-text-muted hover:bg-surface hover:text-text-primary',
+							]}
+							href={item.href}
+							aria-current={isCurrent ? 'page' : undefined}
+						>
+							{item.label}
+						</a>
+					</li>
+				);
+			})
+		}
+	</ul>
+</nav>

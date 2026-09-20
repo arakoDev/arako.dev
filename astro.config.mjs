@@ -4,6 +4,9 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
+	redirects: {
+		'/services': '/commissions',
+	},
 	vite: {
 		plugins: [tailwindcss()],
 	},
