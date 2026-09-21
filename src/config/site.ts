@@ -40,7 +40,7 @@ export const site = {
 	navigation: [
 		{ label: 'Work', href: '/work' },
 		{
-			label: 'Commission info',
+			label: 'Commission Info',
 			href: '/commissions',
 			matchPaths: ['/commissions', '/pricing', '/payments', '/terms'],
 		},
