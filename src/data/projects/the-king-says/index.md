@@ -6,6 +6,7 @@ categories:
 heroImage: "./hero.webp"
 heroAlt: "A large golden Roblox king addressing players with win totals shown on the game interface."
 heroVideo: "https://www.youtube.com/watch?v=JPZ4zFM4yrM"
+videoUploadDate: "2025-07-15"
 featuredOrder: 15
 draft: false
 links:

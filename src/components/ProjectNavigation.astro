@@ -5,15 +5,23 @@ interface NavigationTarget {
 }
 
 interface Props {
+	previousProject?: NavigationTarget;
 	nextProject?: NavigationTarget;
 	class?: string;
 }
 
-const { nextProject, class: className } = Astro.props;
+const { previousProject, nextProject, class: className } = Astro.props;
 const links = [
-	{ eyebrow: 'Work archive', title: 'Browse all projects', href: '/work' },
+	...(previousProject
+		? [{
+				eyebrow: 'Previous project',
+				title: previousProject.title,
+				href: previousProject.href,
+				direction: 'previous' as const,
+			}]
+		: []),
 	...(nextProject
-		? [{ eyebrow: 'Next project', title: nextProject.title, href: nextProject.href }]
+		? [{ eyebrow: 'Next project', title: nextProject.title, href: nextProject.href, direction: 'next' as const }]
 		: []),
 ];
 ---
@@ -32,14 +40,26 @@ const links = [
 						class="motion-row group flex min-h-32 flex-col justify-between p-5 text-text-primary no-underline hover:bg-surface-raised"
 						href={link.href}
 					>
-						<span class="text-label font-semibold uppercase tracking-label text-text-muted">
+						<span
+							class:list={[
+								'text-label font-semibold uppercase tracking-label text-text-muted',
+								link.direction === 'previous' && 'text-right',
+							]}
+						>
 							{link.eyebrow}
 						</span>
 						<span class="mt-5 flex items-end justify-between gap-4 font-semibold">
+							{link.direction === 'previous' && (
+								<span class="motion-arrow text-accent" aria-hidden="true">
+									←
+								</span>
+							)}
 							{link.title}
-							<span class="motion-arrow text-accent" aria-hidden="true">
-								→
-							</span>
+							{link.direction === 'next' && (
+								<span class="motion-arrow text-accent" aria-hidden="true">
+									→
+								</span>
+							)}
 						</span>
 					</a>
 				</li>

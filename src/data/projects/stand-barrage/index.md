@@ -8,6 +8,7 @@ categories:
 heroImage: "./hero.webp"
 heroAlt: "A summoned stand rapidly striking an opponent on a dark patterned Roblox arena."
 heroVideo: "https://www.youtube.com/watch?v=oUVoG8vHX7g"
+videoUploadDate: "2026-06-28"
 featuredOrder: 9
 draft: false
 links:

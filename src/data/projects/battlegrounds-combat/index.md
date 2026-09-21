@@ -7,6 +7,7 @@ categories:
 heroImage: "./hero.webp"
 heroAlt: "Two Roblox characters fighting on a dark patterned arena with damage numbers above the target."
 heroVideo: "https://www.youtube.com/watch?v=Edknn3_aKYM"
+videoUploadDate: "2026-06-28"
 featuredOrder: 3
 draft: false
 links:

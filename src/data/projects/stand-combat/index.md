@@ -7,6 +7,7 @@ categories:
 heroImage: "./hero.webp"
 heroAlt: "A purple summoned stand beside a Roblox avatar during a combat playtest in Roblox Studio."
 heroVideo: "https://www.youtube.com/watch?v=NUIVJUlNk1g"
+videoUploadDate: "2026-06-28"
 featuredOrder: 4
 draft: false
 links:

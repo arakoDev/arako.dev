@@ -7,6 +7,7 @@ categories:
 heroImage: "./hero.webp"
 heroAlt: "Two Roblox avatars fighting while a summoned stand launches an uppercut in a Studio playtest."
 heroVideo: "https://www.youtube.com/watch?v=nQR4eyqY0Po"
+videoUploadDate: "2026-08-02"
 featuredOrder: 6
 draft: false
 links:

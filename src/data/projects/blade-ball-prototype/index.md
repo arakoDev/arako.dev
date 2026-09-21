@@ -7,6 +7,7 @@ categories:
 heroImage: "./hero.webp"
 heroAlt: "A Roblox avatar beside a glowing red ball with a white trajectory trail and shield indicator."
 heroVideo: "https://www.youtube.com/watch?v=77vMhEBMJ8k"
+videoUploadDate: "2026-06-28"
 featuredOrder: 2
 draft: false
 links:

@@ -37,6 +37,10 @@ const projects = defineCollection({
 				.trim()
 				.min(20, 'Hero alt text must meaningfully describe the image.'),
 			heroVideo: youtubeUrl.optional(),
+			videoUploadDate: z
+				.string()
+				.regex(/^\d{4}-\d{2}-\d{2}$/, 'Video upload date must use YYYY-MM-DD.')
+				.optional(),
 			heroCaption: text.optional(),
 			featuredOrder: z.number().int().positive().optional(),
 			draft: z.boolean().default(true),
@@ -61,6 +65,9 @@ const projects = defineCollection({
 					}),
 				)
 				.default([]),
+		}).refine(({ heroVideo, videoUploadDate }) => !heroVideo || videoUploadDate !== undefined, {
+			message: 'Add the YouTube video upload date.',
+			path: ['videoUploadDate'],
 		}),
 });
 

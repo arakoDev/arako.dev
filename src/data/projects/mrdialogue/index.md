@@ -7,6 +7,7 @@ categories:
 heroImage: "./hero.jpg"
 heroAlt: "A Roblox Studio playtest showing the MrDialogue interface during a conversation with an NPC."
 heroVideo: "https://www.youtube.com/watch?v=NQ5bXA1-yWE"
+videoUploadDate: "2026-08-02"
 heroCaption: "A dialogue running with MrDialogue's bundled interface in Roblox Studio."
 featuredOrder: 1
 draft: false

@@ -8,6 +8,7 @@ categories:
 heroImage: "./hero.webp"
 heroAlt: "A Roblox avatar facing several training targets with Rasenshuriken selected on the ability hotbar."
 heroVideo: "https://www.youtube.com/watch?v=Z5gmZ7U6vVU"
+videoUploadDate: "2025-10-27"
 featuredOrder: 10
 draft: false
 links:

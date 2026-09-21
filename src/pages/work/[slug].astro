@@ -7,11 +7,16 @@ import PageHeader from '../../components/PageHeader.astro';
 import ProjectCredits from '../../components/ProjectCredits.astro';
 import ProjectNavigation from '../../components/ProjectNavigation.astro';
 import SectionHeader from '../../components/SectionHeader.astro';
+import UploadDate from '../../components/UploadDate.astro';
 import { projectCategoryLabels, projectLinkLabels } from '../../config/projects';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
 interface Props {
 	project: CollectionEntry<'projects'>;
+	previousProject?: {
+		id: string;
+		title: string;
+	};
 	nextProject?: {
 		id: string;
 		title: string;
@@ -27,6 +32,8 @@ export async function getStaticPaths() {
 	);
 
 	return projects.map((project, index) => {
+		const previousProject =
+			projects.length > 1 ? projects[(index - 1 + projects.length) % projects.length] : undefined;
 		const nextProject =
 			projects.length > 1 ? projects[(index + 1) % projects.length] : undefined;
 
@@ -34,6 +41,9 @@ export async function getStaticPaths() {
 			params: { slug: project.id },
 			props: {
 				project,
+				previousProject: previousProject
+					? { id: previousProject.id, title: previousProject.data.title }
+					: undefined,
 				nextProject: nextProject
 					? { id: nextProject.id, title: nextProject.data.title }
 					: undefined,
@@ -42,7 +52,7 @@ export async function getStaticPaths() {
 	});
 }
 
-const { project, nextProject } = Astro.props;
+const { project, previousProject, nextProject } = Astro.props;
 const { Content } = await render(project);
 const hasBodyContent = Boolean(project.body?.trim());
 const {
@@ -57,6 +67,7 @@ const {
 	outcome,
 	summary,
 	title,
+	videoUploadDate,
 } = project.data;
 const projectLinks = links.map((link) => ({
 	...link,
@@ -76,13 +87,22 @@ const categoryLabel = categories.map((category) => projectCategoryLabels[categor
 				<ButtonLink href="/work" variant="text">&larr; Back to work</ButtonLink>
 			</div>
 
-			<PageHeader
-				class="mt-8"
-				eyebrow={categoryLabel}
-				{title}
-				description={summary}
-				revealDelay={1}
-			/>
+			<div class="mt-8 grid gap-5 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-start">
+				<PageHeader
+					eyebrow={categoryLabel}
+					{title}
+					description={summary}
+					revealDelay={1}
+				/>
+				{
+					videoUploadDate && (
+						<UploadDate
+							class="justify-self-start sm:justify-self-end"
+							date={videoUploadDate}
+						/>
+					)
+				}
+			</div>
 		</div>
 
 		<MediaFrame
@@ -158,6 +178,9 @@ const categoryLabel = categories.map((category) => projectCategoryLabels[categor
 
 		<ProjectNavigation
 			class="mt-section-tight"
+			previousProject={previousProject
+				? { href: `/work/${previousProject.id}`, title: previousProject.title }
+				: undefined}
 			nextProject={nextProject
 				? { href: `/work/${nextProject.id}`, title: nextProject.title }
 				: undefined}

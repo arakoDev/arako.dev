@@ -8,6 +8,7 @@ categories:
 heroImage: "./hero.webp"
 heroAlt: "A bright blue energy blast exploding around several training targets in a Roblox Studio playtest."
 heroVideo: "https://www.youtube.com/watch?v=5hwhBdv7jnY"
+videoUploadDate: "2025-10-27"
 featuredOrder: 11
 draft: false
 links:

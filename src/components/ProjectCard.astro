@@ -3,6 +3,7 @@ import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
 
 import { projectCategoryLabels } from '../config/projects';
+import UploadDate from './UploadDate.astro';
 
 interface Props {
 	project: CollectionEntry<'projects'>;
@@ -12,7 +13,7 @@ interface Props {
 }
 
 const { project, headingLevel = 2, priority = false, revealDelay } = Astro.props;
-const { categories, heroAlt, heroImage, summary, title } = project.data;
+const { categories, heroAlt, heroImage, summary, title, videoUploadDate } = project.data;
 const categoryLabel = categories.map((category) => projectCategoryLabels[category]).join(' · ');
 const Heading = `h${headingLevel}` as 'h2' | 'h3';
 const responsiveWidths = [
@@ -26,7 +27,7 @@ const responsiveWidths = [
 		href={`/work/${project.id}`}
 		aria-label={`View project: ${title}`}
 	>
-		<div class="aspect-video overflow-hidden border-b border-border bg-background">
+		<div class="relative aspect-video overflow-hidden border-b border-border bg-background">
 			<Image
 				class="motion-card-media h-full w-full object-cover group-hover:opacity-90"
 				src={heroImage}
@@ -36,6 +37,7 @@ const responsiveWidths = [
 				loading={priority ? 'eager' : 'lazy'}
 				decoding="async"
 			/>
+			{videoUploadDate && <UploadDate class="absolute right-3 top-3" date={videoUploadDate} />}
 		</div>
 
 		<div class="flex flex-1 flex-col p-5 sm:p-6">
