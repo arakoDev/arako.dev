@@ -41,8 +41,8 @@ export const site = {
 		{ label: 'Work', href: '/work' },
 		{
 			label: 'Commission Info',
-			href: '/commissions',
-			matchPaths: ['/commissions', '/pricing', '/payments', '/terms'],
+			href: '/info',
+			matchPaths: ['/info', '/pricing', '/payments', '/terms'],
 		},
 	],
 	secondaryNavigation: [

@@ -6,7 +6,8 @@ export default defineConfig({
 	site: 'https://arako.dev',
 
 	redirects: {
-		'/services': '/commissions',
+		'/commissions': '/info',
+		'/services': '/info',
 	},
 
 	vite: {
